@@ -33,7 +33,7 @@
         }
 
         /* ==========================================================================
-           1. PREMIUM GLASSMORPHIC LOGIN DESIGN
+           1. SHOCKING GLASSMORPHIC LOGIN DESIGN
            ========================================================================== */
         #loginPage {
             position: fixed;
@@ -46,8 +46,6 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            opacity: 1;
-            transition: opacity 0.4s ease, visibility 0.4s;
         }
 
         .login-card {
@@ -61,12 +59,6 @@
             max-width: 420px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             text-align: center;
-            animation: fadeIn 0.8s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-logo {
@@ -88,7 +80,6 @@
             font-size: 28px;
             margin-bottom: 8px;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
 
         .login-card p {
@@ -152,17 +143,21 @@
 
         .login-error {
             color: #f87171;
-            font-size: 13px;
+            font-size: 14px;
             margin-top: 15px;
             display: none;
-            font-weight: 500;
+            font-weight: 600;
+            background: rgba(239, 68, 68, 0.2);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(239, 68, 68, 0.4);
         }
 
         /* ==========================================================================
-           2. APP MAIN HOME PAGE DESIGN
+           2. DASHBOARD MAIN APP HOME DESIGN
            ========================================================================== */
         #appDashboard {
-            display: none; /* Login ke baad switch hoga */
+            display: none; /* Login success par block hoga */
         }
 
         .main-header {
@@ -206,7 +201,6 @@
             align-items: center;
             gap: 5px;
             font-size: 13px;
-            transition: all 0.2s;
         }
 
         .btn-logout:hover { background: var(--danger); }
@@ -244,7 +238,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-weight: 600;
         }
 
         .dashboard-card h3 .material-icons { color: var(--primary); }
@@ -293,7 +286,6 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            transition: all 0.2s;
         }
 
         .action-btn:hover { background: var(--primary-dark); }
@@ -308,20 +300,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
             margin-bottom: 25px;
         }
 
         .strip-left { display: flex; align-items: center; gap: 8px; font-weight: 600;}
-        .strip-left .indicator { width: 10px; height: 10px; background: #2ecc71; border-radius: 50%; animation: pulse 1.5s infinite; }
+        .strip-left .indicator { width: 10px; height: 10px; background: #2ecc71; border-radius: 50%; }
         
-        @keyframes pulse {
-            0% { transform: scale(0.9); opacity: 0.6; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(0.9); opacity: 0.6; }
-        }
-
         .strip-right { display: flex; gap: 25px; font-weight: 600; }
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 14px; }
         .badge.total { background: rgba(255,255,255,0.15); }
@@ -344,7 +328,6 @@
             background: white;
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
             border: 1px solid #e2e8f0;
         }
 
@@ -389,16 +372,16 @@
             
             <div class="input-group">
                 <span class="material-icons icon">person</span>
-                <input type="text" id="usernameInput" placeholder="Teacher Username ID">
+                <input type="text" id="usernameInput" placeholder="Enter Teacher ID">
             </div>
 
             <div class="input-group">
                 <span class="material-icons icon">lock</span>
-                <input type="password" id="passwordInput" placeholder="Security Password">
+                <input type="password" id="passwordInput" placeholder="Enter Password">
             </div>
 
             <button class="btn-login" onclick="attemptLogin()">Verify & Enter Dashboard</button>
-            <div class="login-error" id="loginErrorMsg">⚠️ Invalid ID or Security Password!</div>
+            <div class="login-error" id="loginErrorMsg">❌ Ghalat ID ya Password dala hai bhai!</div>
         </div>
     </div>
 
@@ -410,7 +393,7 @@
             </div>
             <div class="user-profile">
                 <div class="user-info">
-                    <div class="name" id="displayTeacherName">Prof. Dev Name</div>
+                    <div class="name" id="displayTeacherName">Teacher</div>
                     <div class="role">Authorized Faculty</div>
                 </div>
                 <button class="btn-logout" onclick="performLogout()">
@@ -491,12 +474,18 @@
     </div>
 
     <script>
-        // AUTH DATABASE (10 Preconfigured Active Teacher Accounts Node)
+        // Accounts Database (Preconfigured 10 Teachers Accounts Node)
         const authorizedTeachersDatabase = {
             "pradip": "pradip@2026",
-            "teacher1": "pass1", "teacher2": "pass2", "teacher3": "pass3",
-            "teacher4": "pass4", "teacher5": "pass5", "teacher6": "pass6",
-            "teacher7": "pass7", "teacher8": "pass8", "teacher9": "pass9",
+            "teacher1": "pass1",
+            "teacher2": "pass2",
+            "teacher3": "pass3",
+            "teacher4": "pass4",
+            "teacher5": "pass5",
+            "teacher6": "pass6",
+            "teacher7": "pass7",
+            "teacher8": "pass8",
+            "teacher9": "pass9",
             "teacher10": "pass10"
         };
 
@@ -504,29 +493,44 @@
         let isAttendanceLocked = false;
         let currentLoggedInTeacher = "";
 
-        // Login Logic Module Execution Block
+        // Login core execution function
         function attemptLogin() {
-            const uInput = document.getElementById("usernameInput").value;
-            const pInput = document.getElementById("passwordInput").value;
-            const errorBanner = document.getElementById("loginErrorMsg");
+            try {
+                const usernameEl = document.getElementById("usernameInput");
+                const passwordEl = document.getElementById("passwordInput");
+                const errorBanner = document.getElementById("loginErrorMsg");
 
-            // Cleaning parameters state
-            if(!uInput) { errorBanner.style.display = "block"; return; }
-            const uCleaned = uInput.trim().toLowerCase();
+                if (!usernameEl || !passwordEl) return;
 
-            if (authorizedTeachersDatabase[uCleaned] && authorizedTeachersDatabase[uCleaned] === pInput) {
-                currentLoggedInTeacher = uCleaned;
-                errorBanner.style.display = "none";
-                
-                // Absolute Switch Engine Frame
-                document.getElementById("loginPage").style.visibility = "hidden";
-                document.getElementById("loginPage").style.opacity = "0";
-                document.getElementById("appDashboard").style.display = "block";
-                document.getElementById("displayTeacherName").innerText = "Prof. " + uCleaned.toUpperCase();
-                
-                syncGlobalUIState();
-            } else {
-                errorBanner.style.display = "block";
+                const uRaw = usernameEl.value;
+                const pRaw = passwordEl.value;
+
+                // Input validation checks
+                if (!uRaw || !pRaw) {
+                    errorBanner.style.display = "block";
+                    errorBanner.innerText = "❌ Please enter both fields!";
+                    return;
+                }
+
+                const uClean = uRaw.trim().toLowerCase();
+                const pClean = pRaw.trim();
+
+                if (authorizedTeachersDatabase[uClean] && authorizedTeachersDatabase[uClean] === pClean) {
+                    currentLoggedInTeacher = uClean;
+                    errorBanner.style.display = "none";
+                    
+                    // Direct hide login & show dashboard viewport channel
+                    document.getElementById("loginPage").style.display = "none";
+                    document.getElementById("appDashboard").style.display = "block";
+                    document.getElementById("displayTeacherName").innerText = "Prof. " + uClean.toUpperCase();
+                    
+                    syncGlobalUIState();
+                } else {
+                    errorBanner.style.display = "block";
+                    errorBanner.innerText = "❌ ID ya Password galat hai bhai!";
+                }
+            } catch (err) {
+                console.error("Login process layout error triggered", err);
             }
         }
 
@@ -535,8 +539,7 @@
             document.getElementById("usernameInput").value = "";
             document.getElementById("passwordInput").value = "";
             document.getElementById("appDashboard").style.display = "none";
-            document.getElementById("loginPage").style.visibility = "visible";
-            document.getElementById("loginPage").style.opacity = "1";
+            document.getElementById("loginPage").style.display = "flex";
         }
 
         function syncGlobalUIState() {
@@ -545,4 +548,4 @@
 
             const totalCount = globalStudentsList.length;
             const presentCount = globalStudentsList.filter(s => s.status === 'Present').length;
-            const a
+            const absentCount = globalStudentsList.filter(s => s.status === 'Absen
