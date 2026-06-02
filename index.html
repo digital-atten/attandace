@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enterprise Attendance Portal</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
             --primary: #2ecc71;
@@ -14,14 +13,13 @@
             --text-main: #1e293b;
             --text-muted: #64748b;
             --danger: #ef4444;
-            --warning: #f59e0b;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: Arial, sans-serif;
         }
 
         body {
@@ -32,9 +30,7 @@
             flex-direction: column;
         }
 
-        /* ==========================================================================
-           1. SHOCKING GLASSMORPHIC LOGIN DESIGN
-           ========================================================================== */
+        /* PREMIUM GLASSMORPHIC LOGIN LAYER */
         #loginPage {
             position: fixed;
             top: 0;
@@ -49,9 +45,9 @@
         }
 
         .login-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 40px;
             border-radius: 24px;
@@ -62,17 +58,9 @@
         }
 
         .login-logo {
-            background: rgba(46, 204, 113, 0.2);
             color: var(--primary);
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px auto;
-            font-size: 36px;
-            box-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
+            font-size: 50px;
+            margin-bottom: 15px;
         }
 
         .login-card h2 {
@@ -89,36 +77,27 @@
         }
 
         .input-group {
-            position: relative;
             margin-bottom: 20px;
             text-align: left;
         }
 
-        .input-group span.icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #cbd5e1;
-            font-size: 20px;
+        .input-group label {
+            display: block;
+            color: #fff;
+            font-size: 12px;
+            margin-bottom: 5px;
+            font-weight: 600;
         }
 
         .input-group input {
             width: 100%;
-            padding: 14px 15px 14px 45px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             color: #fff;
             font-size: 15px;
             outline: none;
-            transition: all 0.3s;
-        }
-
-        .input-group input:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(46, 204, 113, 0.3);
         }
 
         .btn-login {
@@ -131,14 +110,11 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
             box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
-            margin-top: 10px;
         }
 
         .btn-login:hover {
             background: var(--primary-dark);
-            transform: translateY(-2px);
         }
 
         .login-error {
@@ -150,14 +126,11 @@
             background: rgba(239, 68, 68, 0.2);
             padding: 8px;
             border-radius: 6px;
-            border: 1px solid rgba(239, 68, 68, 0.4);
         }
 
-        /* ==========================================================================
-           2. DASHBOARD MAIN APP HOME DESIGN
-           ========================================================================== */
+        /* SYSTEM CORE DASHBOARD WORKSPACE */
         #appDashboard {
-            display: none; /* Login success par block hoga */
+            display: none;
         }
 
         .main-header {
@@ -167,43 +140,23 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
             font-size: 20px;
             font-weight: bold;
         }
 
         .header-brand span { color: var(--primary); }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info { text-align: right; }
-        .user-info .name { font-weight: 600; font-size: 15px; }
-        .user-info .role { font-size: 12px; color: var(--primary); }
-
         .btn-logout {
-            background: rgba(255,255,255,0.1);
+            background: var(--danger);
             color: white;
             border: none;
             padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 13px;
         }
-
-        .btn-logout:hover { background: var(--danger); }
 
         .main-container {
             max-width: 1300px;
@@ -219,28 +172,17 @@
             margin-bottom: 25px;
         }
 
-        @media (max-width: 900px) {
-            .panel-grid { grid-template-columns: 1fr; }
-        }
-
         .dashboard-card {
             background: var(--card-bg);
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
             border: 1px solid #e2e8f0;
         }
 
         .dashboard-card h3 {
             font-size: 16px;
-            color: var(--text-main);
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-
-        .dashboard-card h3 .material-icons { color: var(--primary); }
 
         .form-control {
             margin-bottom: 16px;
@@ -260,20 +202,16 @@
             border: 1px solid #cbd5e1;
             border-radius: 8px;
             font-size: 14px;
-            outline: none;
-            color: var(--text-main);
             background: #f8fafc;
         }
 
         .action-cluster {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
         }
 
         .action-btn {
             flex: 1;
-            min-width: 120px;
             background: var(--primary);
             color: white;
             border: none;
@@ -281,14 +219,9 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            text-align: center;
         }
 
-        .action-btn:hover { background: var(--primary-dark); }
         .action-btn.secondary { background: #64748b; }
         .action-btn.accent { background: #0284c7; }
 
@@ -303,26 +236,11 @@
             margin-bottom: 25px;
         }
 
-        .strip-left { display: flex; align-items: center; gap: 8px; font-weight: 600;}
-        .strip-left .indicator { width: 10px; height: 10px; background: #2ecc71; border-radius: 50%; }
-        
         .strip-right { display: flex; gap: 25px; font-weight: 600; }
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 14px; }
         .badge.total { background: rgba(255,255,255,0.15); }
         .badge.present { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
         .badge.absent { background: rgba(239, 68, 68, 0.2); color: #f87171; }
-
-        .lock-banner {
-            background: #fffbeb;
-            border: 1px solid #fef3c7;
-            color: #b45309;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-            align-items: center;
-            gap: 10px;
-        }
 
         .workspace-card {
             background: white;
@@ -339,12 +257,11 @@
         }
 
         .student-table { width: 100%; border-collapse: collapse; }
-        .student-table th { text-align: left; padding: 12px 16px; background: #f8fafc; color: var(--text-muted); font-size: 13px; border-bottom: 1px solid #e2e8f0;}
-        .student-table td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; font-size: 15px;}
+        .student-table th { text-align: left; padding: 12px 16px; background: #f8fafc; color: var(--text-muted); border-bottom: 1px solid #e2e8f0;}
+        .student-table td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9;}
 
-        .row-actions { display: flex; gap: 6px; }
         .btn-row {
-            border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;
+            border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; margin-right: 4px;
         }
         .btn-row.p-btn { background: #e8f5e9; color: #2e7d32; }
         .btn-row.p-btn.active { background: var(--primary); color: white; }
@@ -356,94 +273,74 @@
         .pill-none { background: #e2e8f0; color: #475569; }
         .pill-present { background: #dcfce7; color: #15803d; }
         .pill-absent { background: #fee2e2; color: #b91c1c; }
-
-        .disabled-state { opacity: 0.5; pointer-events: none; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
     <div id="loginPage">
         <div class="login-card">
-            <div class="login-logo">
-                <span class="material-icons">fingerprint</span>
-            </div>
+            <div class="login-logo">🔒</div>
             <h2>Portal Login</h2>
             <p>Authorized Teacher Accounts Only</p>
             
             <div class="input-group">
-                <span class="material-icons icon">person</span>
-                <input type="text" id="usernameInput" placeholder="Enter Teacher ID">
+                <label>Username / Teacher ID</label>
+                <input type="text" id="usernameInput" placeholder="Enter ID here">
             </div>
 
             <div class="input-group">
-                <span class="material-icons icon">lock</span>
-                <input type="password" id="passwordInput" placeholder="Enter Password">
+                <label>Security Password</label>
+                <input type="password" id="passwordInput" placeholder="Enter Password here">
             </div>
 
-            <button class="btn-login" onclick="attemptLogin()">Verify & Enter Dashboard</button>
-            <div class="login-error" id="loginErrorMsg">❌ Ghalat ID ya Password dala hai bhai!</div>
+            <button class="btn-login" id="mainSubmitTriggerBtn">Verify & Enter Dashboard</button>
+            <div class="login-error" id="loginErrorMsg"></div>
         </div>
     </div>
 
     <div id="appDashboard">
         <header class="main-header">
             <div class="header-brand">
-                <span class="material-icons">verified_user</span>
-                <span>Attendance Matrix <span style="color:white;font-weight:300;">Pro</span></span>
+                <span>Attendance Matrix Pro</span>
             </div>
             <div class="user-profile">
-                <div class="user-info">
-                    <div class="name" id="displayTeacherName">Teacher</div>
-                    <div class="role">Authorized Faculty</div>
-                </div>
-                <button class="btn-logout" onclick="performLogout()">
-                    <span class="material-icons" style="font-size: 16px;">logout</span> Logout
-                </button>
+                <span id="displayTeacherName" style="font-weight: bold;">Prof. PRADIP</span>
+                <button class="btn-logout" onclick="performLogout()">Logout</button>
             </div>
         </header>
 
         <main class="main-container">
-            <div class="lock-banner" id="lockStateBanner">
-                <span class="material-icons">lock</span>
-                <span><strong>Attendance Locked!</strong> Active data can no longer be modified or deleted.</span>
-            </div>
-
             <div class="panel-grid">
                 <div class="dashboard-card">
-                    <h3><span class="material-icons">settings</span> 1. System Configurations</h3>
+                    <h3>⚙️ 1. Configurations</h3>
                     <div class="form-control">
                         <label>Select Room / Assigned Batch</label>
                         <select id="classroomSelection">
                             <option value="BCA IV Semester">BCA IV Semester</option>
                             <option value="BCA II Semester">BCA II Semester</option>
                             <option value="BCA VI Semester">BCA VI Semester</option>
-                            <option value="MCA I Semester">MCA I Semester</option>
                         </select>
                     </div>
                     <div class="action-cluster">
-                        <button class="action-btn secondary" id="resetBtn" onclick="createNewAttendanceSession()">Reset Session</button>
-                        <button class="action-btn" style="background:#d97706;" id="lockBtn" onclick="toggleAttendanceLock()">Lock Session</button>
+                        <button class="action-btn secondary" onclick="createNewAttendanceSession()">Reset Session</button>
                     </div>
                 </div>
 
                 <div class="dashboard-card">
-                    <h3><span class="material-icons">cloud_upload</span> 2. Data Upload Center</h3>
+                    <h3>📥 2. Data Upload Center</h3>
                     <div class="form-control">
-                        <label>Bulk System Feed (Paste Comma Separated Student Names)</label>
-                        <textarea id="bulkDataInput" placeholder="Pradip, Rahul, Amit, Pooja..."></textarea>
+                        <label>Paste Student Names (Comma Separated)</label>
+                        <textarea id="bulkDataInput" placeholder="Pradip, Rahul, Amit..."></textarea>
                     </div>
                     <div class="action-cluster">
-                        <button class="action-btn" id="loadDataBtn" onclick="processBulkNamesImport()">Load Students</button>
-                        <button class="action-btn accent" id="shareReportBtn" onclick="generateAndShareReport()">Share Report</button>
+                        <button class="action-btn" onclick="processBulkNamesImport()">Load Students</button>
+                        <button class="action-btn accent" onclick="generateAndShareReport()">Share Report</button>
                     </div>
                 </div>
             </div>
 
             <div class="live-counter-strip">
-                <div class="strip-left">
-                    <div class="indicator"></div>
-                    <div>Active Batch: <span id="stripActiveBatchText" style="color:var(--primary)">BCA IV Semester</span></div>
-                </div>
+                <div>Active Batch: <span id="stripActiveBatchText" style="color:var(--primary); font-weight:bold;">BCA IV Semester</span></div>
                 <div class="strip-right">
                     <div>Total: <span class="badge total" id="lblTotalCount">0</span></div>
                     <div>Present: <span class="badge present" id="lblPresentCount">0</span></div>
@@ -453,9 +350,9 @@
 
             <div class="workspace-card">
                 <div class="workspace-header">
-                    <h2>Live Student Attendance Register</h2>
-                    <div style="display: flex; gap: 8px;" id="inlineAddContainer">
-                        <input type="text" id="singleStudentInput" placeholder="Quick individual name..." style="width:200px; padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px;">
+                    <h2>Live Register</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="singleStudentInput" placeholder="Quick individual name..." style="width:200px; padding:8px;">
                         <button class="action-btn" style="padding:0 15px;" onclick="injectSingleStudentRow()">Add</button>
                     </div>
                 </div>
@@ -464,7 +361,7 @@
                         <tr>
                             <th>Student Name</th>
                             <th>Status State</th>
-                            <th style="text-align: right;">Action Operations</th>
+                            <th style="text-align: right;">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="masterTableBody"></tbody>
@@ -474,78 +371,131 @@
     </div>
 
     <script>
-        // Accounts Database (Preconfigured 10 Teachers Accounts Node)
-        const authorizedTeachersDatabase = {
-            "pradip": "pradip@2026",
-            "teacher1": "pass1",
-            "teacher2": "pass2",
-            "teacher3": "pass3",
-            "teacher4": "pass4",
-            "teacher5": "pass5",
-            "teacher6": "pass6",
-            "teacher7": "pass7",
-            "teacher8": "pass8",
-            "teacher9": "pass9",
-            "teacher10": "pass10"
-        };
+        var globalStudentsList = [];
 
-        let globalStudentsList = [];
-        let isAttendanceLocked = false;
-        let currentLoggedInTeacher = "";
+        // Global Event Routing Model
+        function validateCredentialsAndOpen() {
+            var usernameField = document.getElementById("usernameInput");
+            var passwordField = document.getElementById("passwordInput");
+            var errorDisplay = document.getElementById("loginErrorMsg");
 
-        // Login core execution function
-        function attemptLogin() {
-            try {
-                const usernameEl = document.getElementById("usernameInput");
-                const passwordEl = document.getElementById("passwordInput");
-                const errorBanner = document.getElementById("loginErrorMsg");
+            if(!usernameField || !passwordField) return;
 
-                if (!usernameEl || !passwordEl) return;
+            var userVal = usernameField.value.trim().toLowerCase();
+            var passVal = passwordField.value.trim();
 
-                const uRaw = usernameEl.value;
-                const pRaw = passwordEl.value;
-
-                // Input validation checks
-                if (!uRaw || !pRaw) {
-                    errorBanner.style.display = "block";
-                    errorBanner.innerText = "❌ Please enter both fields!";
-                    return;
-                }
-
-                const uClean = uRaw.trim().toLowerCase();
-                const pClean = pRaw.trim();
-
-                if (authorizedTeachersDatabase[uClean] && authorizedTeachersDatabase[uClean] === pClean) {
-                    currentLoggedInTeacher = uClean;
-                    errorBanner.style.display = "none";
-                    
-                    // Direct hide login & show dashboard viewport channel
-                    document.getElementById("loginPage").style.display = "none";
-                    document.getElementById("appDashboard").style.display = "block";
-                    document.getElementById("displayTeacherName").innerText = "Prof. " + uClean.toUpperCase();
-                    
-                    syncGlobalUIState();
-                } else {
-                    errorBanner.style.display = "block";
-                    errorBanner.innerText = "❌ ID ya Password galat hai bhai!";
-                }
-            } catch (err) {
-                console.error("Login process layout error triggered", err);
+            if (userVal === "pradip" && passVal === "pradip@2026") {
+                errorDisplay.style.display = "none";
+                document.getElementById("loginPage").style.display = "none";
+                document.getElementById("appDashboard").style.display = "block";
+                document.getElementById("displayTeacherName").innerText = "Prof. PRADIP";
+                syncGlobalUIState();
+            } else {
+                errorDisplay.style.display = "block";
+                errorDisplay.innerText = "❌ Username ya Password galat hai bhai!";
             }
         }
 
+        // Click wrapper connection block
+        document.getElementById("mainSubmitTriggerBtn").addEventListener("click", function(e) {
+            e.preventDefault();
+            validateCredentialsAndOpen();
+        });
+
+        // Enter Key listener for ease
+        window.addEventListener("keydown", function(e) {
+            if (e.key === "Enter") {
+                validateCredentialsAndOpen();
+            }
+        });
+
         function performLogout() {
-            currentLoggedInTeacher = "";
             document.getElementById("usernameInput").value = "";
             document.getElementById("passwordInput").value = "";
             document.getElementById("appDashboard").style.display = "none";
             document.getElementById("loginPage").style.display = "flex";
+            if(document.getElementById("loginErrorMsg")) {
+                document.getElementById("loginErrorMsg").style.display = "none";
+            }
         }
 
         function syncGlobalUIState() {
-            const activeBatchName = document.getElementById("classroomSelection").value;
-            document.getElementById("stripActiveBatchText").innerText = activeBatchName;
+            document.getElementById("stripActiveBatchText").innerText = document.getElementById("classroomSelection").value;
+            document.getElementById("lblTotalCount").innerText = globalStudentsList.length;
+            document.getElementById("lblPresentCount").innerText = globalStudentsList.filter(function(s){return s.status==='Present'}).length;
+            document.getElementById("lblAbsentCount").innerText = globalStudentsList.filter(function(s){return s.status==='Absent'}).length;
+            renderStudentsTableRows();
+        }
 
-            const totalCount = globalStudentsList.length;
-            const presentCount = globalStudentsList.filter(s => s.status === 'Present').length;
-            const absentCount = globalStudentsList.filter(s => s.status === 'Absen
+        function renderStudentsTableRows() {
+            var tbody = document.getElementById("masterTableBody");
+            tbody.innerHTML = "";
+            if (globalStudentsList.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#94a3b8; padding:20px; font-style:italic;">No active student logs loaded. Paste bulk data above.</td></tr>';
+                return;
+            }
+            globalStudentsList.forEach(function(student) {
+                var tr = document.createElement("tr");
+                var pActive = student.status === 'Present' ? 'active' : '';
+                var aActive = student.status === 'Absent' ? 'active' : '';
+                var pill = 'pill-none';
+                if(student.status==='Present') pill='pill-present';
+                if(student.status==='Absent') pill='pill-absent';
+
+                tr.innerHTML = '<td><strong>'+student.name+'</strong></td>' +
+                    '<td><span class="status-pill '+pill+'">'+student.status+'</span></td>' +
+                    '<td style="text-align: right;">' +
+                        '<button class="btn-row p-btn '+pActive+'" onclick="mutateStudentStatus('+student.id+',\'Present\')">Present</button>' +
+                        '<button class="btn-row a-btn '+aActive+'" onclick="mutateStudentStatus('+student.id+',\'Absent\')">Absent</button>' +
+                        '<button class="btn-row d-btn" onclick="purgeStudentRowEntity('+student.id+')">Delete</button>' +
+                    '</td>';
+                tbody.appendChild(tr);
+            });
+        }
+
+        function processBulkNamesImport() {
+            var val = document.getElementById("bulkDataInput").value.trim();
+            if(!val) return;
+            val.split(",").forEach(function(name) {
+                if(name.trim()) globalStudentsList.push({ id: Date.now() + Math.random(), name: name.trim(), status: "None" });
+            });
+            document.getElementById("bulkDataInput").value = "";
+            syncGlobalUIState();
+        }
+
+        function injectSingleStudentRow() {
+            var input = document.getElementById("singleStudentInput");
+            if(!input.value.trim()) return;
+            globalStudentsList.push({ id: Date.now(), name: input.value.trim(), status: "None" });
+            input.value = "";
+            syncGlobalUIState();
+        }
+
+        function mutateStudentStatus(id, state) {
+            var target = globalStudentsList.find(function(s){return s.id === id});
+            if(target) { target.status = state; syncGlobalUIState(); }
+        }
+
+        function purgeStudentRowEntity(id) {
+            globalStudentsList = globalStudentsList.filter(function(s){return s.id !== id});
+            syncGlobalUIState();
+        }
+
+        function createNewAttendanceSession() {
+            if(confirm("Clear current attendance list?")) { globalStudentsList = []; syncGlobalUIState(); }
+        }
+
+        function generateAndShareReport() {
+            if(globalStudentsList.length === 0) return;
+            var reportText = "📊 ATTENDANCE REPORT\nBatch: " + document.getElementById("classroomSelection").value + "\n\n";
+            globalStudentsList.forEach(function(s, idx) {
+                var icon = s.status === 'Present' ? '✅' : (s.status === 'Absent' ? '❌' : '➖');
+                reportText += (idx + 1) + ". " + s.name + " -> " + icon + " " + s.status + "\n";
+            });
+            navigator.clipboard.writeText(reportText).then(function() { alert("Report Copied to Clipboard!"); });
+        }
+
+        document.getElementById("classroomSelection").addEventListener("change", syncGlobalUIState);
+    </script>
+</body>
+</html>
