@@ -3,66 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance App - Live Portal</title>
+    <title>Enterprise Multi-Teacher Attendance Matrix (Anti-Reload Pro)</title>
     <style>
         :root {
             --primary: #2ecc71;
             --primary-dark: #27ae60;
-            --dark-bg: #1e293b;
+            --dark-bg: #0f172a;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
             --danger: #ef4444;
-            --danger-dark: #dc2626;
+            --accent: #3b82f6;
+            --warning: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        body { background: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column; }
+        body { background: #f1f5f9; color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* DESIGN LAYER 1: LOGIN GATEWAY */
+        /* LAYER 1: PREMIUM GLASSMORPHIC GATEWAY */
         #loginPage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2ecc71 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #2ecc71 100%);
             display: flex; justify-content: center; align-items: center; z-index: 9999;
         }
         .login-card {
             background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            padding: 40px; border-radius: 24px; width: 100%; max-width: 420px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3); text-align: center; border: 1px solid rgba(255,255,255,0.2);
+            padding: 40px; border-radius: 24px; width: 100%; max-width: 440px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4); text-align: center; border: 1px solid rgba(255,255,255,0.2);
         }
-        .login-card h2 { color: #fff; margin-bottom: 5px; font-size: 28px; }
+        .login-card h2 { color: #fff; margin-bottom: 5px; font-size: 28px; font-weight: bold; }
         .login-card p { color: #cbd5e1; font-size: 13px; margin-bottom: 25px; }
-        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group { margin-bottom: 18px; text-align: left; }
         .input-group label { display: block; color: #fff; font-size: 12px; margin-bottom: 6px; font-weight: 600; }
         .input-group input { width: 100%; padding: 14px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: #fff; font-size: 15px; outline: none; }
-        
-        .btn-login { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 12px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3); transition: 0.2s; }
+        .btn-login { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 12px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3); }
         .btn-login:hover { background: var(--primary-dark); }
-        .login-error { color: #f87171; font-size: 14px; margin-top: 15px; display: none; background: rgba(239, 68, 68, 0.2); padding: 8px; border-radius: 6px; }
+        .login-error { color: #f87171; font-size: 14px; margin-top: 15px; display: none; background: rgba(239, 68, 68, 0.2); padding: 8px; border-radius: 6px; font-weight: bold; }
 
-        /* DESIGN LAYER 2: WORKSPACE */
+        /* LAYER 2: MAIN SYSTEM DASHBOARD */
         #appDashboard { display: none; }
-        .main-header { background: #2ecc71; color: white; padding: 18px; text-align: center; font-size: 24px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .main-header { background: var(--dark-bg); color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header-brand { font-size: 20px; font-weight: bold; }
         
-        .main-container { max-width: 800px; width: 100%; margin: 30px auto; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        
-        .student-input-box { display: flex; gap: 10px; margin-bottom: 20px; }
-        .student-input-box input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 15px; }
-        
-        .btn-action { padding: 12px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; }
-        .btn-add { background: var(--primary); }
-        .btn-add:hover { background: var(--primary-dark); }
+        /* ADVANCED 3-DOT DROPDOWN INTERFACE */
+        .menu-container { position: relative; display: inline-block; }
+        .three-dots { font-size: 32px; cursor: pointer; padding: 5px 15px; color: white; user-select: none; font-weight: bold; border-radius: 50%; }
+        .three-dots:hover { background: rgba(255,255,255,0.1); }
+        .dropdown-menu { 
+            display: none; position: absolute; right: 0; top: 50px; background: white; 
+            min-width: 260px; box-shadow: 0px 10px 25px rgba(0,0,0,0.2); border-radius: 12px; z-index: 1000; overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        .dropdown-menu a { color: var(--text-main); padding: 14px 20px; text-decoration: none; display: block; font-size: 14px; cursor: pointer; font-weight: 600; border-bottom: 1px solid #f1f5f9; }
+        .dropdown-menu a:hover { background-color: #f8fafc; color: var(--accent); }
+        .dropdown-menu a.logout-link { color: var(--danger); }
+        .dropdown-menu a.logout-link:hover { background: #fef2f2; }
 
-        .counter-strip { background: #f8fafc; padding: 15px; border-radius: 10px; text-align: center; font-weight: bold; color: #475569; margin-bottom: 20px; border: 1px solid #e2e8f0; font-size: 16px; }
+        .main-container { max-width: 1400px; width: 100%; margin: 25px auto; padding: 0 24px; flex: 1; }
         
-        .student-item { display: flex; flex-direction: column; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 10px; margin-bottom: 12px; text-align: center; }
-        .student-info { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1e293b; }
-        .btn-group { display: flex; gap: 8px; }
+        /* FILTER CONTROL PANEL */
+        .config-bar { background: white; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0; display: flex; gap: 20px; margin-bottom: 25px; align-items: center; flex-wrap: wrap; }
+        .form-control { flex: 1; min-width: 220px; }
+        .form-control label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+        .form-control select, .form-control input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #f8fafc; font-size: 14px; color: var(--text-main); font-weight: 500; outline: none; }
+
+        /* VIEW MODULE SECTIONS */
+        .content-section { background: white; border-radius: 16px; padding: 28px; border: 1px solid #e2e8f0; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .content-section h2 { font-size: 22px; margin-bottom: 8px; }
+        .hidden { display: none; }
+
+        /* REGISTER STRIP COUNTERS */
+        .counter-strip { background: var(--dark-bg); color: white; padding: 18px 24px; border-radius: 14px; display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; align-items: center; }
+        .strip-right { display: flex; gap: 15px; }
+        .badge { padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 700; display: inline-block; }
+        .badge.total { background: #475569; }
+        .badge.present { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+        .badge.absent { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+        /* COMPONENT TABLES */
+        .app-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .app-table th, .app-table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid #e2e8f0; }
+        .app-table th { background: #f8fafc; color: var(--text-muted); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+
+        /* OPERATION CONTROL BUTTONS */
+        .btn { padding: 12px 24px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-accent { background: var(--accent); color: white; }
+
+        .btn-row { padding: 6px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; margin-right: 6px; }
+        .btn-row.p-btn { background: #e8f5e9; color: #2e7d32; }
+        .btn-row.p-btn.active { background: var(--primary); color: white; }
+        .btn-row.a-btn { background: #ffebee; color: #c62828; }
+        .btn-row.a-btn.active { background: var(--danger); color: white; }
+        .btn-danger-custom { background: #ffebee; color: #c62828; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-weight: bold; }
+        .btn-danger-custom:hover { background: var(--danger); color: white; }
         
-        .btn-state { padding: 8px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
-        .btn-p { background: #e8f5e9; color: #2e7d32; }
-        .btn-p.active { background: var(--primary); color: white; }
-        .btn-a { background: #ffebee; color: #c62828; }
-        .btn-a.active { background: var(--danger); color: white; }
-        .btn-del { background: #f3f4f6; color: #4b5563; }
-        .btn-del:hover { background: var(--danger); color: white; }
+        .status-pill { padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; text-transform: uppercase; display: inline-block; }
+        .pill-none { background: #e2e8f0; color: #475569; }
+        .pill-present { background: #dcfce7; color: #15803d; }
+        .pill-absent { background: #fee2e2; color: #b91c1c; }
+
+        /* ANALYTICS CARD TILES */
+        .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
+        .analytics-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; text-align: center; }
+        .analytics-card h4 { font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
+        .analytics-card .value { font-size: 28px; font-weight: bold; color: var(--dark-bg); }
     </style>
 </head>
 <body>
@@ -73,141 +119,54 @@
             <p>Authorized Teacher Accounts Only</p>
             <div class="input-group">
                 <label>Username / Teacher ID</label>
-                <input type="text" id="usernameInput" placeholder="Username daliye" autocomplete="off">
+                <input type="text" id="usernameInput" placeholder="Enter ID here" autocomplete="off">
             </div>
             <div class="input-group">
                 <label>Security Password</label>
-                <input type="password" id="passwordInput" placeholder="Password daliye">
+                <input type="password" id="passwordInput" placeholder="Enter Password here">
             </div>
-            <button type="button" class="btn-login" onclick="validateAndEnter(event)">Verify & Enter Dashboard</button>
+            <button type="button" class="btn-login" id="loginSubmitBtn">Verify & Enter Dashboard</button>
             <div class="login-error" id="loginErrorMsg"></div>
         </div>
     </div>
 
     <div id="appDashboard">
-        <header class="main-header">📋 Attendance App</header>
-        
-        <main class="main-container">
-            <div class="student-input-box">
-                <input type="text" id="studentNameInput" placeholder="Student name yahan likhein...">
-                <button type="button" class="btn-action btn-add" onclick="addNewStudent(event)">Add Student</button>
-            </div>
-
-            <div class="counter-strip" id="counterStrip">
-                Total: 0 | Present: 0 | Absent: 0
-            </div>
-
-            <div id="studentListContainer"></div>
-        </main>
-    </div>
-
-    <script>
-        // Credentials Control Config
-        var AUTH_USER = "pradip";
-        var AUTH_PASS = "pradip@2026";
-
-        // Memory State Repository
-        var studentsData = JSON.parse(localStorage.getItem("app_students_list")) || [];
-
-        // Dynamic State Auto-Recovery Engine
-        window.addEventListener("DOMContentLoaded", function() {
-            var activeSession = sessionStorage.getItem("is_logged_in");
-            if (activeSession === "true") {
-                displayDashboard();
-            }
-        });
-
-        // 100% Anti-Reload Form Verification Loop
-        function validateAndEnter(e) {
-            if(e) { e.preventDefault(); e.stopPropagation(); } // Page reload block engine
-            
-            var userField = document.getElementById("usernameInput").value.trim();
-            var passField = document.getElementById("passwordInput").value.trim();
-            var errorLabel = document.getElementById("loginErrorMsg");
-
-            if (userField === AUTH_USER && passField === AUTH_PASS) {
-                errorLabel.style.display = "none";
-                sessionStorage.setItem("is_logged_in", "true");
-                displayDashboard();
-            } else {
-                errorLabel.style.display = "block";
-                errorLabel.innerText = "❌ Galat Details! Sahi Username/Password dalein.";
-            }
-            return false;
-        }
-
-        function displayDashboard() {
-            document.getElementById("loginPage").style.display = "none";
-            document.getElementById("appDashboard").style.display = "block";
-            renderInterface();
-        }
-
-        // Add Student Core
-        function addNewStudent(e) {
-            if(e) { e.preventDefault(); }
-            var nameInp = document.getElementById("studentNameInput");
-            var nameVal = nameInp.value.trim();
-            
-            if(!nameVal) return;
-
-            studentsData.push({
-                id: "id_" + Date.now(),
-                name: nameVal,
-                status: "Present" // Default configuration standard match
-            });
-
-            localStorage.setItem("app_students_list", JSON.stringify(studentsData));
-            nameInp.value = "";
-            renderInterface();
-        }
-
-        // Toggle Status System
-        function changeStatus(id, newStatus, e) {
-            if(e) { e.preventDefault(); }
-            studentsData = studentsData.map(function(s) {
-                if(s.id === id) { s.status = newStatus; }
-                return s;
-            });
-            localStorage.setItem("app_students_list", JSON.stringify(studentsData));
-            renderInterface();
-        }
-
-        // Purge Student System
-        function deleteStudent(id, e) {
-            if(e) { e.preventDefault(); }
-            studentsData = studentsData.filter(function(s) { return s.id !== id; });
-            localStorage.setItem("app_students_list", JSON.stringify(studentsData));
-            renderInterface();
-        }
-
-        // High Performance Render Slate
-        function renderInterface() {
-            var container = document.getElementById("studentListContainer");
-            container.innerHTML = "";
-
-            var total = studentsData.length;
-            var present = 0;
-            var absent = 0;
-
-            studentsData.forEach(function(student) {
-                if(student.status === "Present") present++;
-                if(student.status === "Absent") absent++;
-
-                var div = document.createElement("div");
-                div.className = "student-item";
-                div.innerHTML = `
-                    <div class="student-info">${student.name} - ${student.status}</div>
-                    <div class="btn-group">
-                        <button type="button" class="btn-state btn-p ${student.status === 'Present' ? 'active' : ''}" onclick="changeStatus('${student.id}', 'Present', event)">Present</button>
-                        <button type="button" class="btn-state btn-a ${student.status === 'Absent' ? 'active' : ''}" onclick="changeStatus('${student.id}', 'Absent', event)">Absent</button>
-                        <button type="button" class="btn-state btn-del" onclick="deleteStudent('${student.id}', event)">Delete</button>
+        <header class="main-header">
+            <div class="header-brand">Attendance <span style="color: var(--primary);">Matrix Pro</span></div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <span id="currentTeacherBadge" style="background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 13px;">Teacher: -</span>
+                
+                <div class="menu-container">
+                    <div class="three-dots" id="threeDotsBtn">⋮</div>
+                    <div class="dropdown-menu" id="dotsDropdown">
+                        <a id="navAttendance">📊 1. Take Attendance (Live)</a>
+                        <a id="navManage">👥 2. Add/Manage Student Lists</a>
+                        <a id="navHistory">💾 3. View Permanent History</a>
+                        <a id="navAnalytics">📈 4. Analytics Dashboard</a>
+                        <a id="navExport">⚙️ 5. Backup & Export Center</a>
+                        <a id="navLogout" class="logout-link">🔒 Logout</a>
                     </div>
-                `;
-                container.appendChild(div);
-            });
+                </div>
+            </div>
+        </header>
 
-            document.getElementById("counterStrip").innerText = `Total: ${total} | Present: ${present} | Absent: ${absent}`;
-        }
-    </script>
-</body>
-</html>
+        <main class="main-container">
+            
+            <div class="config-bar">
+                <div class="form-control">
+                    <label>Select Room / Assigned Batch</label>
+                    <select id="globalClassSelect">
+                        <option value="BCA_IV">BCA IV Semester</option>
+                        <option value="BCA_II">BCA II Semester</option>
+                        <option value="BCA_VI">BCA VI Semester</option>
+                        <option value="MCA_II">MCA II Semester</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label>Operational Date</label>
+                    <input type="date" id="globalDateInput">
+                </div>
+            </div>
+
+            <div id="attendanceView" class="content-section">
+                <h2>📊 Daily Attendance Register</h2>
