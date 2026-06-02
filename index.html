@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SRTMNU Enterprise Attendance Matrix Pro</title>
+    <title>MatrixERP - Enterprise Attendance</title>
     <style>
         :root {
             --primary: #2ecc71;
             --primary-dark: #27ae60;
             --dark-bg: #0f172a;
-            --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --danger: #ef4444;
             --accent: #3b82f6;
-            --warning: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
@@ -36,21 +34,319 @@
         .input-group { margin-bottom: 18px; text-align: left; }
         .input-group label { display: block; color: #fff; font-size: 12px; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
         .input-group input { width: 100%; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; color: #fff; font-size: 15px; outline: none; }
-        .btn-login { width: 100%; padding: 13px; background: var(--primary); border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3); }
+        
+        .btn-login { 
+            width: 100%; padding: 13px; background: var(--primary); border: none; border-radius: 10px; 
+            color: white; font-size: 16px; font-weight: 600; cursor: pointer; 
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3); margin-top: 10px; display: block;
+        }
         .btn-login:hover { background: var(--primary-dark); }
         .login-error { color: #f87171; font-size: 13px; margin-top: 12px; display: none; background: rgba(239, 68, 68, 0.2); padding: 8px; border-radius: 6px; font-weight: bold; }
 
-        /* MAIN DASHBOARD RENDER FRAMEWORK */
+        /* MAIN DASHBOARD PANEL */
         #appDashboard { display: none; }
         .main-header { background: var(--dark-bg); color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; }
         .header-brand { font-size: 20px; font-weight: bold; }
         
-        /* 3-DOT OPTION CONTROL UNIT */
         .menu-container { position: relative; display: inline-block; }
         .three-dots { font-size: 28px; cursor: pointer; padding: 2px 12px; color: white; user-select: none; font-weight: bold; border-radius: 6px; background: rgba(255,255,255,0.1); }
         .dropdown-menu { 
             display: none; position: absolute; right: 0; top: 45px; background: white; 
             min-width: 250px; box-shadow: 0px 8px 24px rgba(0,0,0,0.15); border-radius: 10px; z-index: 1000; overflow: hidden; border: 1px solid #e2e8f0;
         }
-        .dropdown-menu a { color: var(--text-main); padding: 12px 18px; text-decoration: none; display: block; font-size: 13px; cursor: pointer; font-weight: 600; border-bottom: 1px solid #f1f5f9; }
-        .dropdown-
+        .dropdown-menu a { color: var(--text-main); padding: 12px 18px; text-decoration: none; display: block; font-size: 13px; cursor: pointer; font-weight: 600; border-bottom: 1px solid #f1f5f9; text-align: left; }
+        .dropdown-menu a:hover { background-color: #f8fafc; color: var(--accent); }
+        
+        .main-container { max-width: 1400px; width: 100%; margin: 25px auto; padding: 0 20px; }
+        .grid-panel { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-bottom: 25px; }
+        .dashboard-card { background: white; border-radius: 14px; padding: 20px; border: 1px solid #e2e8f0; }
+        .dashboard-card h3 { font-size: 15px; margin-bottom: 15px; color: var(--dark-bg); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+
+        .form-control { margin-bottom: 14px; }
+        .form-control label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
+        .form-control select, .form-control input, .form-control textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; font-size: 13px; font-weight: 600; outline: none; }
+
+        .live-counter-strip { background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); color: white; border-radius: 12px; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; font-weight: bold; }
+        .strip-right { display: flex; gap: 15px; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+        .badge.total { background: #475569; }
+        .badge.present { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .badge.absent { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+        .workspace-card { background: white; border-radius: 14px; padding: 24px; border: 1px solid #e2e8f0; }
+        .workspace-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+        .student-table { width: 100%; border-collapse: collapse; }
+        .student-table th { text-align: left; padding: 12px; background: #f8fafc; color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; }
+        .student-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+
+        .btn-action { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; text-transform: uppercase; }
+        .btn-action:hover { background: var(--primary-dark); }
+        .btn-action.accent { background: var(--accent); }
+
+        .btn-row { border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; margin-right: 4px; }
+        .btn-row.p-btn { background: #e8f5e9; color: #2e7d32; }
+        .btn-row.p-btn.active { background: var(--primary); color: white; }
+        .btn-row.a-btn { background: #ffebee; color: #c62828; }
+        .btn-row.a-btn.active { background: var(--danger); color: white; }
+        .btn-row.d-btn { background: #f1f5f9; color: #64748b; }
+
+        .whatsapp-btn { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; }
+
+        .status-pill { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .pill-none { background: #e2e8f0; color: #475569; }
+        .pill-present { background: #dcfce7; color: #15803d; }
+        .pill-absent { background: #fee2e2; color: #b91c1c; }
+
+        .timetable-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 10px; }
+        .time-slot { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-size: 12px; }
+        .time-slot font { display: block; font-weight: bold; color: var(--dark-bg); margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <div id="loginPage">
+        <div class="login-card">
+            <h2>Portal Login</h2>
+            <p>Swami Ramanand Teerth Marathwada University Matrix</p>
+            
+            <div class="input-group">
+                <label>Professor ID / Username</label>
+                <input type="text" id="usernameInput" value="pradip" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label>Security Access Password</label>
+                <input type="password" id="passwordInput" value="pradip@2026">
+            </div>
+
+            <button type="button" class="btn-login" onclick="processSecureLoginVerify()">Secure Authentication</button>
+            <div class="login-error" id="loginErrorMsg"></div>
+        </div>
+    </div>
+
+    <div id="appDashboard">
+        <header class="main-header">
+            <div class="header-brand">Matrix ERP <span style="color:var(--primary)">Pro</span></div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <span id="displayTeacherName" style="font-weight: bold; background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 20px; font-size: 13px;">Prof. -</span>
+                <div class="menu-container">
+                    <div class="three-dots" id="triggerDotsMenu" onclick="toggleDropdownConsoleStrip(event)">⋮</div>
+                    <div class="dropdown-menu" id="dotsDropdown">
+                        <a onclick="triggerActionCenter('clear')">Clear Current Sheet Roll</a>
+                        <a onclick="triggerActionCenter('sample')">Inject BCA IV Sem Dummy Pool</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-container">
+            <div class="grid-panel">
+                <div class="dashboard-card">
+                    <h3>⚙️ 1. Configurations</h3>
+                    <div class="form-control">
+                        <label>Select Portfolio</label>
+                        <select id="classroomSelection" onchange="syncSystemDataRegistryState()">
+                            <option value="BCA_IV" selected>BCA IV Semester Class Matrix</option>
+                            <option value="BCA_II">BCA II Semester Class Matrix</option>
+                        </select>
+                    </div>
+                    <div class="form-control">
+                        <label>Date</label>
+                        <input type="date" id="globalDateInput" onchange="syncSystemDataRegistryState()">
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3>📥 2. Operations Center</h3>
+                    <div class="form-control">
+                        <label>Bulk Names (Comma Separated)</label>
+                        <textarea id="bulkDataInput" rows="2" placeholder="Rahul, Priya, Amit..."></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <button type="button" class="btn-action" onclick="parseBulkInputToStorage()">Load Bulk Sheet</button>
+                        <button type="button" class="btn-action accent" onclick="processClipboardReportCompilation()">📋 Copy Report</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card" style="margin-bottom: 25px;">
+                <h3>📅 Schedule</h3>
+                <div class="timetable-box">
+                    <div class="time-slot"><font>09:00 AM</font> Advanced Java Tech</div>
+                    <div class="time-slot" style="background:#e8f5e9; border-color:var(--primary);"><font>11:15 AM</font> Design Thinking / AI</div>
+                </div>
+            </div>
+
+            <div class="live-counter-strip">
+                <div>Active Batch: <span id="stripActiveBatchText" style="color:var(--primary)">BCA IV</span></div>
+                <div class="strip-right">
+                    <div>Total: <span class="badge total" id="lblTotalCount">0</span></div>
+                    <div>P: <span class="badge present" id="lblPresentCount">0</span></div>
+                    <div>A: <span class="badge absent" id="lblAbsentCount">0</span></div>
+                </div>
+            </div>
+
+            <div class="workspace-card">
+                <div class="workspace-header">
+                    <h2>📊 Live Register</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="singleStudentInput" placeholder="Name..." style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                        <button type="button" class="btn-action" style="width: auto; padding: 0 20px;" onclick="injectSingleNameNode()">Add</button>
+                    </div>
+                </div>
+                <table class="student-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Status</th>
+                            <th>Attendance %</th>
+                            <th style="text-align: right;">Actions</th>
+                            <th style="text-align: right;">Broadcasting</th>
+                        </tr>
+                    </thead>
+                    <tbody id="masterTableBody"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        var CURRENT_TEACHER_ID = "";
+        var TEACHER_REGISTRY_MAP = { "pradip": "pradip@2026" };
+
+        document.getElementById("globalDateInput").value = new Date().toISOString().split('T')[0];
+
+        window.addEventListener("DOMContentLoaded", function() {
+            window.addEventListener("click", function(e) {
+                if (!e.target.matches('#triggerDotsMenu')) {
+                    var d = document.getElementById("dotsDropdown");
+                    if(d) d.style.display = "none";
+                }
+            });
+        });
+
+        function processSecureLoginVerify() {
+            var user = document.getElementById("usernameInput").value.trim().toLowerCase();
+            var pass = document.getElementById("passwordInput").value.trim();
+            var err = document.getElementById("loginErrorMsg");
+
+            if(TEACHER_REGISTRY_MAP[user] && TEACHER_REGISTRY_MAP[user] === pass) {
+                err.style.display = "none";
+                CURRENT_TEACHER_ID = user;
+                
+                document.getElementById("loginPage").style.display = "none";
+                document.getElementById("appDashboard").style.display = "block";
+                document.getElementById("displayTeacherName").innerText = "Prof. " + CURRENT_TEACHER_ID.toUpperCase();
+                
+                triggerActionCenter('sample');
+            } else {
+                err.style.display = "block";
+                err.innerText = "❌ Incorrect Details!";
+            }
+        }
+
+        function toggleDropdownConsoleStrip(e) {
+            if(e) { e.preventDefault(); e.stopPropagation(); }
+            var d = document.getElementById("dotsDropdown");
+            d.style.display = (d.style.display === "block") ? "none" : "block";
+        }
+
+        function getKeyStudents() { return "matrix_students_repo_" + CURRENT_TEACHER_ID; }
+        function getKeyAttendance() { return "matrix_attendance_logs_" + CURRENT_TEACHER_ID; }
+
+        function getStudentsPool(classId) {
+            var data = JSON.parse(localStorage.getItem(getKeyStudents())) || {};
+            return data[classId] || [];
+        }
+
+        function saveStudentsPool(classId, arr) {
+            var data = JSON.parse(localStorage.getItem(getKeyStudents())) || {};
+            data[classId] = arr;
+            localStorage.setItem(getKeyStudents(), JSON.stringify(data));
+        }
+
+        function getDailyLogSheet(classId, dateStr) {
+            var data = JSON.parse(localStorage.getItem(getKeyAttendance())) || {};
+            return data[classId + "_" + dateStr] || {};
+        }
+
+        function saveDailyLogSheet(classId, dateStr, logs) {
+            var data = JSON.parse(localStorage.getItem(getKeyAttendance())) || {};
+            data[classId + "_" + dateStr] = logs;
+            localStorage.setItem(getKeyAttendance(), JSON.stringify(data));
+        }
+
+        function syncSystemDataRegistryState() {
+            if(!CURRENT_TEACHER_ID) return;
+            var activeClass = document.getElementById("classroomSelection").value;
+            var activeDate = document.getElementById("globalDateInput").value;
+            
+            var students = getStudentsPool(activeClass);
+            var logs = getDailyLogSheet(activeClass, activeDate);
+
+            document.getElementById("stripActiveBatchText").innerText = document.getElementById("classroomSelection").options[document.getElementById("classroomSelection").selectedIndex].text;
+            document.getElementById("lblTotalCount").innerText = students.length;
+
+            var pCount = 0, aCount = 0;
+            students.forEach(function(s) {
+                if(logs[s.id] === "Present") pCount++;
+                if(logs[s.id] === "Absent") aCount++;
+            });
+            document.getElementById("lblPresentCount").innerText = pCount;
+            document.getElementById("lblAbsentCount").innerText = aCount;
+
+            renderTableRowsEngine(students, logs, activeClass, activeDate);
+        }
+
+        function renderTableRowsEngine(students, logs, classId, dateStr) {
+            var tbody = document.getElementById("masterTableBody");
+            tbody.innerHTML = "";
+
+            if(students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px; color:var(--text-muted);">Register Empty</td></tr>';
+                return;
+            }
+
+            students.forEach(function(st) {
+                var state = logs[st.id] || "None";
+                var pillClass = state === "Present" ? "pill-present" : (state === "Absent" ? "pill-absent" : "pill-none");
+                var secureApiUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(st.name + " is " + state);
+
+                var tr = document.createElement("tr");
+                tr.innerHTML = '<td><strong>' + st.name + '</strong></td>' +
+                    '<td><span class="status-pill ' + pillClass + '">' + state + '</span></td>' +
+                    '<td><strong style="color:var(--accent);">86%</strong></td>' +
+                    '<td style="text-align: right;">' +
+                        '<button type="button" class="btn-row p-btn '+(state==='Present'?'active':'')+'" onclick="commitStateTransition(\''+st.id+'\', \'Present\')">P</button>' +
+                        '<button type="button" class="btn-row a-btn '+(state==='Absent'?'active':'')+'" onclick="commitStateTransition(\''+st.id+'\', \'Absent\')">A</button>' +
+                        '<button type="button" class="btn-row d-btn" onclick="executePurgeRow(\''+st.id+'\')">X</button>' +
+                    '</td>' +
+                    '<td style="text-align: right;">' +
+                        (state !== "None" ? '<a href="'+secureApiUrl+'" target="_blank" class="whatsapp-btn">💬 Send</a>' : '<span>-</span>') +
+                    '</td>';
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.commitStateTransition = function(id, state) {
+            var activeClass = document.getElementById("classroomSelection").value;
+            var activeDate = document.getElementById("globalDateInput").value;
+            var logs = getDailyLogSheet(activeClass, activeDate);
+            logs[id] = state;
+            saveDailyLogSheet(activeClass, activeDate, logs);
+            syncSystemDataRegistryState();
+        };
+
+        window.executePurgeRow = function(id) {
+            var activeClass = document.getElementById("classroomSelection").value;
+            var updatedPool = getStudentsPool(activeClass).filter(function(s) { return s.id !== id; });
+            saveStudentsPool(activeClass, updatedPool);
+            syncSystemDataRegistryState();
+        };
+
+        function injectSingleNameNode() {
+            var target = document.getElementById("singleStudentInput");
+            var name = target.value.trim();
+            if(!name) return;
+            var activeClass = document.getElementById("classroomSelection").value;
+            var current = getStudentsPool(activ
