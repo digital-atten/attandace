@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Attendance Management System</title>
+    <title>MatrixERP - Non-Reloading Attendance Portal</title>
     <style>
         :root {
             --primary: #2ecc71;
@@ -14,381 +14,137 @@
             --text-muted: #64748b;
             --danger: #ef4444;
             --accent: #3b82f6;
+            --warning: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        body { background: #f1f5f9; color: var(--text-main); min-height: 100vh; }
+        body { background: #f1f5f9; color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* LAYER 1: LOGIN BOX */
+        /* LAYER 1: PREMIUM SECURITY GATEWAY */
         #loginPage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #2ecc71 100%);
             display: flex; justify-content: center; align-items: center; z-index: 9999;
         }
         .login-card {
-            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px);
-            padding: 40px; border-radius: 24px; width: 100%; max-width: 420px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: center; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            padding: 40px; border-radius: 24px; width: 100%; max-width: 440px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center; border: 1px solid rgba(255,255,255,0.2);
         }
-        .login-card h2 { color: #fff; margin-bottom: 20px; }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        .input-group label { display: block; color: #fff; font-size: 12px; margin-bottom: 5px; font-weight: 600; }
+        .login-card h2 { color: #fff; margin-bottom: 5px; font-size: 28px; font-weight: bold; }
+        .login-card p { color: #cbd5e1; font-size: 13px; margin-bottom: 25px; }
+        .input-group { margin-bottom: 18px; text-align: left; }
+        .input-group label { display: block; color: #fff; font-size: 12px; margin-bottom: 6px; font-weight: 600; }
         .input-group input { width: 100%; padding: 14px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: #fff; font-size: 15px; outline: none; }
-        .btn-login { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 12px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; }
-        .login-error { color: #f87171; font-size: 14px; margin-top: 15px; display: none; background: rgba(239, 68, 68, 0.2); padding: 8px; border-radius: 6px; }
+        .btn-login { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 12px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3); }
+        .btn-login:hover { background: var(--primary-dark); }
+        .login-error { color: #f87171; font-size: 14px; margin-top: 15px; display: none; background: rgba(239, 68, 68, 0.2); padding: 8px; border-radius: 6px; font-weight: bold; }
 
-        /* LAYER 2: MAIN DASHBOARD */
+        /* LAYER 2: APP DASHBOARD WORKSPACE */
         #appDashboard { display: none; }
-        .main-header { background: var(--dark-bg); color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: relative; }
+        .main-header { background: var(--dark-bg); color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header-brand { font-size: 20px; font-weight: bold; }
         
-        /* 3-DOT MENU STYLING */
+        /* 3-DOT OPTION DROPDOWN ENGINE */
         .menu-container { position: relative; display: inline-block; }
-        .three-dots { font-size: 28px; cursor: pointer; padding: 5px 10px; color: white; user-select: none; }
+        .three-dots { font-size: 32px; cursor: pointer; padding: 5px 15px; color: white; user-select: none; font-weight: bold; border-radius: 50%; }
+        .three-dots:hover { background: rgba(255,255,255,0.1); }
         .dropdown-menu { 
-            display: none; position: absolute; right: 0; top: 40px; background: white; 
-            min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.2); border-radius: 8px; z-index: 100; overflow: hidden;
+            display: none; position: absolute; right: 0; top: 50px; background: white; 
+            min-width: 260px; box-shadow: 0px 10px 25px rgba(0,0,0,0.2); border-radius: 12px; z-index: 1000; overflow: hidden;
+            border: 1px solid #e2e8f0;
         }
-        .dropdown-menu a { color: var(--text-main); padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; cursor: pointer; }
-        .dropdown-menu a:hover { background-color: #f1f5f9; }
+        .dropdown-menu a { color: var(--text-main); padding: 14px 20px; text-decoration: none; display: block; font-size: 14px; cursor: pointer; font-weight: 600; border-bottom: 1px solid #f1f5f9; }
+        .dropdown-menu a:hover { background-color: #f8fafc; color: var(--accent); }
+        .dropdown-menu a.logout-link { color: var(--danger); }
+        .dropdown-menu a.logout-link:hover { background: #fef2f2; }
 
-        .main-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .main-container { max-width: 1400px; width: 100%; margin: 25px auto; padding: 0 24px; flex: 1; }
         
-        /* CONFIGBARS */
-        .config-bar { background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; gap: 20px; margin-bottom: 25px; align-items: center; flex-wrap: wrap; }
-        .form-control { flex: 1; min-width: 200px; }
-        .form-control label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; }
-        .form-control select, .form-control input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; }
+        /* CONFIGURATION BAR */
+        .config-bar { background: white; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0; display: flex; gap: 20px; margin-bottom: 25px; align-items: center; flex-wrap: wrap; }
+        .form-control { flex: 1; min-width: 220px; }
+        .form-control label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+        .form-control select, .form-control input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #f8fafc; font-size: 14px; color: var(--text-main); font-weight: 500; outline: none; }
 
-        /* VIEW MODALS / SECTIONS */
-        .content-section { background: white; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; margin-bottom: 25px; }
+        /* INTERFACES CONTENT BLOCKS */
+        .content-section { background: white; border-radius: 16px; padding: 28px; border: 1px solid #e2e8f0; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .content-section h2 { font-size: 22px; margin-bottom: 8px; }
         .hidden { display: none; }
 
-        /* COUNTER STRIP */
-        .counter-strip { background: var(--dark-bg); color: white; padding: 15px 20px; border-radius: 10px; display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; }
-        .badge { padding: 3px 8px; border-radius: 12px; font-size: 12px; margin-left: 5px; }
-        .badge.total { background: #64748b; }
-        .badge.present { background: #2ecc71; }
-        .badge.absent { background: #ef4444; }
+        /* LIVE COUNTER PANEL */
+        .counter-strip { background: var(--dark-bg); color: white; padding: 18px 24px; border-radius: 14px; display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; align-items: center; }
+        .strip-right { display: flex; gap: 15px; }
+        .badge { padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 700; display: inline-block; }
+        .badge.total { background: #475569; }
+        .badge.present { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+        .badge.absent { background: rgba(239, 68, 68, 0.15); color: #f87171; }
 
         /* TABLES */
         .app-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .app-table th, .app-table td { text-align: left; padding: 12px; border-bottom: 1px solid #e2e8f0; }
-        .app-table th { background: #f8fafc; color: var(--text-muted); font-size: 13px; }
+        .app-table th, .app-table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid #e2e8f0; }
+        .app-table th { background: #f8fafc; color: var(--text-muted); font-size: 12px; font-weight: 700; text-transform: uppercase; }
 
-        /* UTILITY BUTTONS */
-        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; }
+        /* BUTTONS */
+        .btn { padding: 12px 24px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: var(--primary-dark); }
-        .btn-danger { background: var(--danger); color: white; }
         .btn-accent { background: var(--accent); color: white; }
 
-        .btn-row { padding: 6px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; margin-right: 5px; }
+        .btn-row { padding: 6px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; margin-right: 6px; }
         .btn-row.p-btn { background: #e8f5e9; color: #2e7d32; }
         .btn-row.p-btn.active { background: var(--primary); color: white; }
         .btn-row.a-btn { background: #ffebee; color: #c62828; }
         .btn-row.a-btn.active { background: var(--danger); color: white; }
         
-        .status-pill { padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+        .status-pill { padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; text-transform: uppercase; display: inline-block; }
         .pill-none { background: #e2e8f0; color: #475569; }
         .pill-present { background: #dcfce7; color: #15803d; }
         .pill-absent { background: #fee2e2; color: #b91c1c; }
+
+        .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
+        .analytics-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; text-align: center; }
+        .analytics-card h4 { font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
+        .analytics-card .value { font-size: 28px; font-weight: bold; color: var(--dark-bg); }
     </style>
 </head>
 <body>
 
     <div id="loginPage">
         <div class="login-card">
-            <h2>Portal Login</h2>
+            <h2>Enterprise Gateway</h2>
+            <p>20+ Active Teachers / 2000+ Permanent Records</p>
             <div class="input-group">
-                <label>Teacher ID</label>
-                <input type="text" id="usernameInput" placeholder="e.g. pradip" autocomplete="off">
+                <label>Teacher ID / Username</label>
+                <input type="text" id="usernameInput" placeholder="e.g., pradip ya teacher01" autocomplete="off">
             </div>
             <div class="input-group">
-                <label>Password</label>
+                <label>Security Password</label>
                 <input type="password" id="passwordInput" placeholder="••••••••">
             </div>
-            <button type="button" class="btn-login" onclick="handleLogin(event)">Verify & Enter</button>
+            <button type="button" class="btn-login" onclick="handleSystemAuthentication(event)">Secure Verification & Enter</button>
             <div class="login-error" id="loginErrorMsg"></div>
         </div>
     </div>
 
     <div id="appDashboard">
         <header class="main-header">
-            <div style="font-size: 20px; font-weight: bold;">Attendance Management Engine</div>
-            
-            <div class="menu-container">
-                <div class="three-dots" onclick="toggleDropdown(event)">⋮</div>
-                <div class="dropdown-menu" id="dotsDropdown">
-                    <a onclick="switchView('attendanceView')">📊 Take Attendance</a>
-                    <a onclick="switchView('manageStudentsView')">👥 Add/Manage Students List</a>
-                    <a onclick="switchView('historyView')">💾 View Permanent Records</a>
-                    <a onclick="handleLogout()" style="color: var(--danger); border-top: 1px solid #e2e8f0;">Logout</a>
+            <div class="header-brand">MatrixERP <span style="color: var(--primary);">System Pro</span></div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <span id="currentTeacherBadge" style="background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 13px;">Teacher: -</span>
+                
+                <div class="menu-container">
+                    <div class="three-dots" onclick="toggleDropdownEngine(event)">⋮</div>
+                    <div class="dropdown-menu" id="dotsDropdown">
+                        <a onclick="switchSystemInterface('attendanceView', event)">📊 1. Take Attendance (Live)</a>
+                        <a onclick="switchSystemInterface('manageStudentsView', event)">👥 2. Add/Manage Student Lists</a>
+                        <a onclick="switchSystemInterface('historyView', event)">💾 3. View Permanent History</a>
+                        <a onclick="switchSystemInterface('analyticsView', event)">📈 4. Analytics Dashboard</a>
+                        <a onclick="switchSystemInterface('exportView', event)">⚙️ 5. Backup & Export Center</a>
+                        <a onclick="performSecureLogout(event)" class="logout-link">🔒 Terminate Session (Logout)</a>
+                    </div>
                 </div>
             </div>
         </header>
 
         <main class="main-container">
-            
-            <div class="config-bar">
-                <div class="form-control">
-                    <label>Select Active Class (Out of 10 Batches)</label>
-                    <select id="globalClassSelect" onchange="onClassOrDateChange()">
-                        <option value="BCA Sem 1">BCA Semester I</option>
-                        <option value="BCA Sem 2">BCA Semester II</option>
-                        <option value="BCA Sem 3">BCA Semester III</option>
-                        <option value="BCA Sem 4">BCA Semester IV</option>
-                        <option value="BCA Sem 5">BCA Semester V</option>
-                        <option value="BCA Sem 6">BCA Semester VI</option>
-                        <option value="MCA Sem 1">MCA Semester I</option>
-                        <option value="MCA Sem 2">MCA Semester II</option>
-                        <option value="B.Sc CS 1">B.Sc CS Year 1</option>
-                        <option value="B.Sc CS 2">B.Sc CS Year 2</option>
-                    </select>
-                </div>
-                <div class="form-control">
-                    <label>Attendance Date</label>
-                    <input type="date" id="globalDateInput" onchange="onClassOrDateChange()">
-                </div>
-            </div>
-
-            <div id="attendanceView" class="content-section">
-                <h2>Daily Attendance Register</h2>
-                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">Note: Rooz subah status refresh milega, mark karne ke baad database me auto-save ho jata hai.</p>
-                
-                <div class="counter-strip">
-                    <div>Class: <span id="stripClass" style="color:var(--primary)">-</span></div>
-                    <div>Total: <span class="badge total" id="countTotal">0</span></div>
-                    <div>Present: <span class="badge present" id="countPresent">0</span></div>
-                    <div>Absent: <span class="badge absent" id="countAbsent">0</span></div>
-                </div>
-
-                <table class="app-table">
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Today Status</th>
-                            <th style="text-align: right;">Action Operations</th>
-                        </tr>
-                    </thead>
-                    <tbody id="attendanceTableBody"></tbody>
-                </table>
-            </div>
-
-            <div id="manageStudentsView" class="content-section hidden">
-                <h2>Add / Manage Students List</h2>
-                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Selected Class ke andar naye baccho ka naam save karein permanent list ke liye.</p>
-                
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <input type="text" id="newStudentNameInput" placeholder="Enter student full name..." style="flex:1; padding:12px; border:1px solid #cbd5e1; border-radius:8px;">
-                    <button class="btn btn-primary" onclick="addNewStudentToList()">Add to List</button>
-                </div>
-
-                <h3>Current Master List for Selected Class</h3>
-                <table class="app-table">
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th style="text-align: right;">Operations</th>
-                        </tr>
-                    </thead>
-                    <tbody id="masterListTableBody"></tbody>
-                </table>
-            </div>
-
-            <div id="historyView" class="content-section hidden">
-                <h2>Saved Permanent History Logs</h2>
-                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Is selected Date aur Class ka purana saved data sheet niche dekhein.</p>
-                
-                <table class="app-table">
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Saved Attendance Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTableBody"></tbody>
-                </table>
-            </div>
-
-        </main>
-    </div>
-
-    <script>
-        // System Data Layout Structure:
-        // localStorage.students = { "Class Name": [ {id, name}, ... ] }
-        // localStorage.attendance = { "Class_Date": { "studentId": "Present/Absent", ... } }
-
-        // Initialize empty local storage datasets if not present
-        if(!localStorage.getItem("students")) localStorage.setItem("students", JSON.stringify({}));
-        if(!localStorage.getItem("attendance")) localStorage.setItem("attendance", JSON.stringify({}));
-
-        // Set Default Date as Today's Local Date
-        document.getElementById("globalDateInput").value = new Date().toISOString().split('T')[0];
-
-        function handleLogin(e) {
-            e.preventDefault();
-            var u = document.getElementById("usernameInput").value.trim().toLowerCase();
-            var p = document.getElementById("passwordInput").value.trim();
-            var err = document.getElementById("loginErrorMsg");
-
-            if(u === "pradip" && p === "pradip@2026") {
-                err.style.display = "none";
-                document.getElementById("loginPage").style.display = "none";
-                document.getElementById("appDashboard").style.display = "block";
-                onClassOrDateChange(); // Load data initially
-            } else {
-                err.style.display = "block";
-                err.innerText = "❌ Galat Details hain bhai!";
-            }
-        }
-
-        function handleLogout() {
-            document.getElementById("usernameInput").value = "";
-            document.getElementById("passwordInput").value = "";
-            document.getElementById("appDashboard").style.display = "none";
-            document.getElementById("loginPage").style.display = "flex";
-        }
-
-        // Dropdown Toggle Mechanism
-        function toggleDropdown(e) {
-            e.stopPropagation();
-            var drop = document.getElementById("dotsDropdown");
-            drop.style.display = (drop.style.display === "block") ? "none" : "block";
-        }
-
-        // Close dropdown when clicking outside
-        window.onclick = function() {
-            document.getElementById("dotsDropdown").style.display = "none";
-        }
-
-        // Switch Screen Views From Dropdown Options
-        function switchView(viewId) {
-            document.getElementById("attendanceView").classList.add("hidden");
-            document.getElementById("manageStudentsView").classList.add("hidden");
-            document.getElementById("historyView").classList.add("hidden");
-            
-            document.getElementById(viewId).classList.remove("hidden");
-            onClassOrDateChange();
-        }
-
-        // Main Router Core - Triggers whenever Class or Date dropdown alters
-        function onClassOrDateChange() {
-            var activeClass = document.getElementById("globalClassSelect").value;
-            document.getElementById("stripClass").innerText = activeClass;
-            
-            renderAttendanceRegister();
-            renderMasterStudentsList();
-            renderPermanentHistory();
-        }
-
-        // Get student objects array for active class
-        function getStudentsForClass(className) {
-            var data = JSON.parse(localStorage.getItem("students"));
-            return data[className] || [];
-        }
-
-        // Save student objects array for active class
-        function saveStudentsForClass(className, studentArr) {
-            var data = JSON.parse(localStorage.getItem("students"));
-            data[className] = studentArr;
-            localStorage.setItem("students", JSON.stringify(data));
-        }
-
-        // Get saved status tracking map for a class on a specific date
-        function getAttendanceMap(className, dateStr) {
-            var allAtt = JSON.parse(localStorage.getItem("attendance"));
-            var key = className + "_" + dateStr;
-            return allAtt[key] || {};
-        }
-
-        // Save status tracking map
-        function saveAttendanceMap(className, dateStr, mapData) {
-            var allAtt = JSON.parse(localStorage.getItem("attendance"));
-            var key = className + "_" + dateStr;
-            allAtt[key] = mapData;
-            localStorage.setItem("attendance", JSON.stringify(allAtt));
-        }
-
-        // OPERATION 1: ADD NEW STUDENT IN MASTER LIST
-        function addNewStudentToList() {
-            var nameInput = document.getElementById("newStudentNameInput");
-            var name = nameInput.value.trim();
-            if(!name) return;
-
-            var activeClass = document.getElementById("globalClassSelect").value;
-            var currentList = getStudentsForClass(activeClass);
-
-            // Structure Object Entity Injection
-            currentList.push({ id: "std_" + Date.now() + "_" + Math.floor(Math.random()*1000), name: name });
-            saveStudentsForClass(activeClass, currentList);
-            
-            nameInput.value = "";
-            onClassOrDateChange();
-        }
-
-        // DELETE A STUDENT PERMANENTLY FROM MASTER LIST
-        function deleteStudentFromMaster(studentId) {
-            if(!confirm("Are you sure you want to delete this student from the master list?")) return;
-            var activeClass = document.getElementById("globalClassSelect").value;
-            var currentList = getStudentsForClass(activeClass);
-            currentList = currentList.filter(function(s) { return s.id !== studentId; });
-            saveStudentsForClass(activeClass, currentList);
-            onClassOrDateChange();
-        }
-
-        // RENDER METHOD A: REGISTER STATUS TABLE
-        function renderAttendanceRegister() {
-            var activeClass = document.getElementById("globalClassSelect").value;
-            var activeDate = document.getElementById("globalDateInput").value;
-            
-            var students = getStudentsForClass(activeClass);
-            var attendanceMap = getAttendanceMap(activeClass, activeDate);
-            
-            var tbody = document.getElementById("attendanceTableBody");
-            tbody.innerHTML = "";
-
-            if(students.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:20px;">No students found. Go to 3-Dot menu -> Add/Manage Students List first.</td></tr>';
-                updateBadgesCounters(0, 0, 0);
-                return;
-            }
-
-            var pCount = 0, aCount = 0;
-
-            students.forEach(function(student) {
-                // If no entry exists for today, it stays "None" (Fresh daily list)
-                var status = attendanceMap[student.id] || "None";
-                if(status === "Present") pCount++;
-                if(status === "Absent") aCount++;
-
-                var pillClass = "pill-none";
-                if(status === "Present") pillClass = "pill-present";
-                if(status === "Absent") pillClass = "pill-absent";
-
-                var tr = document.createElement("tr");
-                tr.innerHTML = '<td><strong>' + student.name + '</strong></td>' +
-                    '<td><span class="status-pill ' + pillClass + '">' + status + '</span></td>' +
-                    '<td style="text-align: right;">' +
-                        '<button class="btn-row p-btn ' + (status==='Present'?'active':'') + '" onclick="markStatus(\''+student.id+'\', \'Present\')">Present</button>' +
-                        '<button class="btn-row a-btn ' + (status==='Absent'?'active':'') + '" onclick="markStatus(\''+student.id+'\', \'Absent\')">Absent</button>' +
-                    '</td>';
-                tbody.appendChild(tr);
-            });
-
-            updateBadgesCounters(students.length, pCount, aCount);
-        }
-
-        // MARK TODAY STATUS FUNCTION - INCREMENTAL DATA RECORDING
-        function markStatus(studentId, state) {
-            var activeClass = document.getElementById("globalClassSelect").value;
-            var activeDate = document.getElementById("globalDateInput").value;
-            
-            var attendanceMap = getAttendanceMap(activeClass, activeDate);
-            attendanceMap[studentId] = state; // Permanent tracking node updated
-            
-            saveAttendanceMap(activeClass, activeDate, attendanceMap);
-            onClassOrDateChange();
-        }
-
-        function updateBadgesCounters(t, p, a) {
-            document.getElementById("countTotal").innerText = t;
