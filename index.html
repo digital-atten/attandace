@@ -166,7 +166,7 @@
            2. APP MAIN HOME PAGE DESIGN (Modern Premium Layout)
            ========================================================================== */
         #appDashboard {
-            display: none; /* Login ke baad khulega */
+            display: none;
         }
 
         .main-header {
@@ -215,7 +215,6 @@
 
         .btn-logout:hover { background: var(--danger); }
 
-        /* Dashboard Layout Grid */
         .main-container {
             max-width: 1300px;
             width: 100%;
@@ -238,7 +237,7 @@
             background: var(--card-bg);
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
             border: 1px solid #e2e8f0;
         }
 
@@ -254,7 +253,6 @@
 
         .dashboard-card h3 .material-icons { color: var(--primary); }
 
-        /* Form styling */
         .form-control {
             margin-bottom: 16px;
         }
@@ -278,12 +276,6 @@
             background: #f8fafc;
         }
 
-        .form-control select:focus, .form-control textarea:focus, .form-control input:focus {
-            border-color: var(--primary);
-            background: #fff;
-        }
-
-        /* Action Row Buttons */
         .action-cluster {
             display: flex;
             gap: 10px;
@@ -310,11 +302,8 @@
 
         .action-btn:hover { background: var(--primary-dark); }
         .action-btn.secondary { background: #64748b; }
-        .action-btn.secondary:hover { background: #475569; }
         .action-btn.accent { background: #0284c7; }
-        .action-btn.accent:hover { background: #0369a1; }
 
-        /* Live Status Counter Bar */
         .live-counter-strip {
             background: var(--dark-bg);
             color: white;
@@ -326,7 +315,6 @@
             flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 25px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
 
         .strip-left { display: flex; align-items: center; gap: 8px; font-weight: 600;}
@@ -344,7 +332,6 @@
         .badge.present { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
         .badge.absent { background: rgba(239, 68, 68, 0.2); color: #f87171; }
 
-        /* Dynamic Status Notification Alert banner */
         .lock-banner {
             background: #fffbeb;
             border: 1px solid #fef3c7;
@@ -355,11 +342,8 @@
             display: none;
             align-items: center;
             gap: 10px;
-            font-weight: 500;
-            font-size: 14px;
         }
 
-        /* Workspace Grid List rendering */
         .workspace-card {
             background: white;
             border-radius: 16px;
@@ -373,69 +357,28 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
         }
 
-        .student-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        .student-table { width: 100%; border-collapse: collapse; }
+        .student-table th { text-align: left; padding: 12px 16px; background: #f8fafc; color: var(--text-muted); font-size: 13px; border-bottom: 1px solid #e2e8f0;}
+        .student-table td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; font-size: 15px;}
 
-        .student-table th {
-            text-align: left;
-            padding: 12px 16px;
-            background: #f8fafc;
-            color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 600;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .student-table td {
-            padding: 14px 16px;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 15px;
-        }
-
-        .student-row:hover { background: #f8fafc; }
-
-        /* Row Action Interactive Buttons */
         .row-actions { display: flex; gap: 6px; }
         .btn-row {
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.2s;
+            border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;
         }
         .btn-row.p-btn { background: #e8f5e9; color: #2e7d32; }
         .btn-row.p-btn.active { background: var(--primary); color: white; }
         .btn-row.a-btn { background: #ffebee; color: #c62828; }
         .btn-row.a-btn.active { background: var(--danger); color: white; }
         .btn-row.d-btn { background: #f1f5f9; color: #64748b; }
-        .btn-row.d-btn:hover { background: #e2e8f0; color: #334155; }
 
-        .status-pill {
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: bold;
-        }
+        .status-pill { padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; }
         .pill-none { background: #e2e8f0; color: #475569; }
         .pill-present { background: #dcfce7; color: #15803d; }
         .pill-absent { background: #fee2e2; color: #b91c1c; }
 
-        .disabled-state {
-            opacity: 0.6;
-            cursor: not-allowed !important;
-            pointer-events: none;
-        }
+        .disabled-state { opacity: 0.5; pointer-events: none; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -463,9 +406,7 @@
         </div>
     </div>
 
-
     <div id="appDashboard">
-        
         <header class="main-header">
             <div class="header-brand">
                 <span class="material-icons">verified_user</span>
@@ -483,17 +424,14 @@
         </header>
 
         <main class="main-container">
-
             <div class="lock-banner" id="lockStateBanner">
                 <span class="material-icons">lock</span>
-                <span><strong>Attendance Locked!</strong> Active data can no longer be modified or deleted. Unlock to clear or change states.</span>
+                <span><strong>Attendance Locked!</strong> Active data can no longer be modified or deleted.</span>
             </div>
 
             <div class="panel-grid">
-                
                 <div class="dashboard-card">
                     <h3><span class="material-icons">settings</span> 1. System Configurations</h3>
-                    
                     <div class="form-control">
                         <label>Select Room / Assigned Batch</label>
                         <select id="classroomSelection">
@@ -501,38 +439,25 @@
                             <option value="BCA II Semester">BCA II Semester</option>
                             <option value="BCA VI Semester">BCA VI Semester</option>
                             <option value="MCA I Semester">MCA I Semester</option>
-                            <option value="M.Sc Cyber Security">M.Sc Cyber Security</option>
                         </select>
                     </div>
-
                     <div class="action-cluster">
-                        <button class="action-btn secondary" id="resetBtn" onclick="createNewAttendanceSession()">
-                            <span class="material-icons" style="font-size: 16px;">refresh</span> Reset Session
-                        </button>
-                        <button class="action-btn" style="background:#d97706;" id="lockBtn" onclick="toggleAttendanceLock()">
-                            <span class="material-icons" id="lockBtnIcon" style="font-size: 16px;">lock</span> <span id="lockBtnText">Lock Session</span>
-                        </button>
+                        <button class="action-btn secondary" id="resetBtn" onclick="createNewAttendanceSession()">Reset Session</button>
+                        <button class="action-btn" style="background:#d97706;" id="lockBtn" onclick="toggleAttendanceLock()">Lock Session</button>
                     </div>
                 </div>
 
                 <div class="dashboard-card">
-                    <h3><span class="material-icons">cloud_upload</span> 2. Data Upload & Distribution Center</h3>
-                    
+                    <h3><span class="material-icons">cloud_upload</span> 2. Data Upload Center</h3>
                     <div class="form-control">
                         <label>Bulk System Feed (Paste Comma Separated Student Names)</label>
-                        <textarea id="bulkDataInput" placeholder="Pradip, Rahul, Amit, Pooja, Sachin, Rohan..."></textarea>
+                        <textarea id="bulkDataInput" placeholder="Pradip, Rahul, Amit, Pooja..."></textarea>
                     </div>
-
                     <div class="action-cluster">
-                        <button class="action-btn" id="loadDataBtn" onclick="processBulkNamesImport()">
-                            <span class="material-icons" style="font-size: 16px;">group_add</span> Load Students
-                        </button>
-                        <button class="action-btn accent" id="shareReportBtn" onclick="generateAndShareReport()">
-                            <span class="material-icons" style="font-size: 16px;">share</span> Share Report
-                        </button>
+                        <button class="action-btn" id="loadDataBtn" onclick="processBulkNamesImport()">Load Students</button>
+                        <button class="action-btn accent" id="shareReportBtn" onclick="generateAndShareReport()">Share Report</button>
                     </div>
                 </div>
-
             </div>
 
             <div class="live-counter-strip">
@@ -541,7 +466,7 @@
                     <div>Active Batch: <span id="stripActiveBatchText" style="color:var(--primary)">BCA IV Semester</span></div>
                 </div>
                 <div class="strip-right">
-                    <div>Total Base: <span class="badge total" id="lblTotalCount">0</span></div>
+                    <div>Total: <span class="badge total" id="lblTotalCount">0</span></div>
                     <div>Present: <span class="badge present" id="lblPresentCount">0</span></div>
                     <div>Absent: <span class="badge absent" id="lblAbsentCount">0</span></div>
                 </div>
@@ -550,13 +475,11 @@
             <div class="workspace-card">
                 <div class="workspace-header">
                     <h2>Live Student Attendance Register</h2>
-                    
                     <div style="display: flex; gap: 8px;" id="inlineAddContainer">
                         <input type="text" id="singleStudentInput" placeholder="Quick individual name..." style="width:200px; padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px;">
                         <button class="action-btn" style="padding:0 15px;" onclick="injectSingleStudentRow()">Add</button>
                     </div>
                 </div>
-
                 <table class="student-table">
                     <thead>
                         <tr>
@@ -565,25 +488,61 @@
                             <th style="text-align: right;">Action Operations</th>
                         </tr>
                     </thead>
-                    <tbody id="masterTableBody">
-                        </tbody>
+                    <tbody id="masterTableBody"></tbody>
                 </table>
             </div>
-
         </main>
     </div>
 
     <script>
-    // 10 Teachers Authorization Database
-    const authorizedTeachersDatabase = {
-        "pradip": "pradip@2026",
-        "rahul": "rahul123",
-        "amit": "amitpass",
-        "pooja": "pooja99",
-        "sachin": "sachin007",
-        "rohan": "rohan@faculty",
-        "sneha": "sneha123",
-        "vikram": "vikram99",
-        "jyoti": "jyoti@pass",
-        "anil": "anil2026"
-    };
+        // UPDATED TEACHER DATABASE (Your custom credentials loaded successfully)
+        const authorizedTeachersDatabase = {
+            "pradip": "pradip@2026",
+            "teacher1": "pass1",
+            "teacher2": "pass2"
+        };
+
+        let globalStudentsList = [];
+        let isAttendanceLocked = false;
+        let currentLoggedInTeacher = "";
+
+        function attemptLogin() {
+            const uField = document.getElementById("usernameInput").value.trim().toLowerCase();
+            const pField = document.getElementById("passwordInput").value;
+            const errorBanner = document.getElementById("loginErrorMsg");
+
+            if (authorizedTeachersDatabase[uField] && authorizedTeachersDatabase[uField] === pField) {
+                currentLoggedInTeacher = uField.toUpperCase();
+                errorBanner.style.display = "none";
+                
+                document.getElementById("loginPage").style.opacity = "0";
+                setTimeout(() => {
+                    document.getElementById("loginPage").style.display = "none";
+                    document.getElementById("appDashboard").style.display = "block";
+                    document.getElementById("displayTeacherName").innerText = "Prof. " + currentLoggedInTeacher;
+                    syncGlobalUIState();
+                }, 400);
+            } else {
+                errorBanner.style.display = "block";
+            }
+        }
+
+        function performLogout() {
+            currentLoggedInTeacher = "";
+            document.getElementById("usernameInput").value = "";
+            document.getElementById("passwordInput").value = "";
+            document.getElementById("appDashboard").style.display = "none";
+            document.getElementById("loginPage").style.display = "flex";
+            setTimeout(() => { document.getElementById("loginPage").style.opacity = "1"; }, 50);
+        }
+
+        function syncGlobalUIState() {
+            const activeBatchName = document.getElementById("classroomSelection").value;
+            document.getElementById("stripActiveBatchText").innerText = activeBatchName;
+
+            const totalCount = globalStudentsList.length;
+            const presentCount = globalStudentsList.filter(s => s.status === 'Present').length;
+            const absentCount = globalStudentsList.filter(s => s.status === 'Absent').length;
+
+            document.getElementById("lblTotalCount").innerText = totalCount;
+            document.getElementById("lblPresentCount").innerText = presentCount;
