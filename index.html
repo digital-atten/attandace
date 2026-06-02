@@ -33,7 +33,7 @@
         }
 
         /* ==========================================================================
-           1. SHOCKING LOGIN PAGE DESIGN (Glassmorphic Premium UI)
+           1. PREMIUM GLASSMORPHIC LOGIN DESIGN
            ========================================================================== */
         #loginPage {
             position: fixed;
@@ -46,7 +46,8 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: all 0.5s ease;
+            opacity: 1;
+            transition: opacity 0.4s ease, visibility 0.4s;
         }
 
         .login-card {
@@ -129,10 +130,6 @@
             box-shadow: 0 0 15px rgba(46, 204, 113, 0.3);
         }
 
-        .input-group input::placeholder {
-            color: #94a3b8;
-        }
-
         .btn-login {
             width: 100%;
             padding: 14px;
@@ -151,7 +148,6 @@
         .btn-login:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(46, 204, 113, 0.4);
         }
 
         .login-error {
@@ -163,10 +159,10 @@
         }
 
         /* ==========================================================================
-           2. APP MAIN HOME PAGE DESIGN (Modern Premium Layout)
+           2. APP MAIN HOME PAGE DESIGN
            ========================================================================== */
         #appDashboard {
-            display: none;
+            display: none; /* Login ke baad switch hoga */
         }
 
         .main-header {
@@ -495,33 +491,40 @@
     </div>
 
     <script>
-        // UPDATED TEACHER DATABASE (Your custom credentials loaded successfully)
+        // AUTH DATABASE (10 Preconfigured Active Teacher Accounts Node)
         const authorizedTeachersDatabase = {
             "pradip": "pradip@2026",
-            "teacher1": "pass1",
-            "teacher2": "pass2"
+            "teacher1": "pass1", "teacher2": "pass2", "teacher3": "pass3",
+            "teacher4": "pass4", "teacher5": "pass5", "teacher6": "pass6",
+            "teacher7": "pass7", "teacher8": "pass8", "teacher9": "pass9",
+            "teacher10": "pass10"
         };
 
         let globalStudentsList = [];
         let isAttendanceLocked = false;
         let currentLoggedInTeacher = "";
 
+        // Login Logic Module Execution Block
         function attemptLogin() {
-            const uField = document.getElementById("usernameInput").value.trim().toLowerCase();
-            const pField = document.getElementById("passwordInput").value;
+            const uInput = document.getElementById("usernameInput").value;
+            const pInput = document.getElementById("passwordInput").value;
             const errorBanner = document.getElementById("loginErrorMsg");
 
-            if (authorizedTeachersDatabase[uField] && authorizedTeachersDatabase[uField] === pField) {
-                currentLoggedInTeacher = uField.toUpperCase();
+            // Cleaning parameters state
+            if(!uInput) { errorBanner.style.display = "block"; return; }
+            const uCleaned = uInput.trim().toLowerCase();
+
+            if (authorizedTeachersDatabase[uCleaned] && authorizedTeachersDatabase[uCleaned] === pInput) {
+                currentLoggedInTeacher = uCleaned;
                 errorBanner.style.display = "none";
                 
+                // Absolute Switch Engine Frame
+                document.getElementById("loginPage").style.visibility = "hidden";
                 document.getElementById("loginPage").style.opacity = "0";
-                setTimeout(() => {
-                    document.getElementById("loginPage").style.display = "none";
-                    document.getElementById("appDashboard").style.display = "block";
-                    document.getElementById("displayTeacherName").innerText = "Prof. " + currentLoggedInTeacher;
-                    syncGlobalUIState();
-                }, 400);
+                document.getElementById("appDashboard").style.display = "block";
+                document.getElementById("displayTeacherName").innerText = "Prof. " + uCleaned.toUpperCase();
+                
+                syncGlobalUIState();
             } else {
                 errorBanner.style.display = "block";
             }
@@ -532,8 +535,8 @@
             document.getElementById("usernameInput").value = "";
             document.getElementById("passwordInput").value = "";
             document.getElementById("appDashboard").style.display = "none";
-            document.getElementById("loginPage").style.display = "flex";
-            setTimeout(() => { document.getElementById("loginPage").style.opacity = "1"; }, 50);
+            document.getElementById("loginPage").style.visibility = "visible";
+            document.getElementById("loginPage").style.opacity = "1";
         }
 
         function syncGlobalUIState() {
@@ -542,7 +545,4 @@
 
             const totalCount = globalStudentsList.length;
             const presentCount = globalStudentsList.filter(s => s.status === 'Present').length;
-            const absentCount = globalStudentsList.filter(s => s.status === 'Absent').length;
-
-            document.getElementById("lblTotalCount").innerText = totalCount;
-            document.getElementById("lblPresentCount").innerText = presentCount;
+            const a
