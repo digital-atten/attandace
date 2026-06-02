@@ -7,55 +7,156 @@
 
     <style>
         body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             text-align: center;
             background: #f2f2f2;
+            margin: 0;
+            padding: 0;
         }
         
+        /* 🔒 लॉगिन स्क्रीन का डिज़ाइन */
+        #login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #login-container h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        #login-container input {
+            width: 85%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        #login-container button {
+            width: 92%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #login-container button:hover {
+            background-color: #45a049;
+        }
+
+        .error-msg {
+            color: red;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* 📋 अटेंडेंस ऐप का डिज़ाइन */
         h1 {
             background: #4CAF50;
             color: white;
             padding: 10px;
+            margin-top: 0;
         }
         
-        input {
+        #main-app-content input {
             padding: 10px;
             width: 70%;
             margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         
-        button {
+        #main-app-content button {
             padding: 8px;
             margin: 5px;
             border: none;
             border-radius: 5px;
             background: #4CAF50;
             color: white;
+            cursor: pointer;
         }
         
         li {
             background: white;
-            margin: 5px;
+            margin: 5px auto;
             padding: 10px;
             list-style: none;
             border-radius: 5px;
+            max-width: 80%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* शुरुआत में असली ऐप छुपा रहेगा */
+        #main-app-content {
+            display: none;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>📋 Attendance App</h1>
+    <!-- 1. 🔒 लॉगिन स्क्रीन (सबसे पहले दिखाई देगी) -->
+    <div id="login-container">
+        <h2>🔒 Attendance App Login</h2>
+        <p>आगे बढ़ने के लिए पासवर्ड दर्ज करें</p>
+        <input type="password" id="password-input" placeholder="पासवर्ड यहाँ लिखें...">
+        <br>
+        <button onclick="checkPassword()">Log In</button>
+        <div id="error-message" class="error-msg">गलत पासवर्ड! कृपया दोबारा कोशिश करें।</div>
+    </div>
 
-    <input type="text" id="name" placeholder="Enter student name">
-    <br>
-    <button onclick="addStudent()">Add Student</button>
+    <!-- 2. 📋 आपका असली अटेंडेंस ऐप (सफल लॉगिन के बाद दिखेगा) -->
+    <div id="main-app-content">
+        <h1>📋 Attendance App</h1>
 
-    <h3 id="total"></h3>
+        <input type="text" id="name" placeholder="Enter student name">
+        <br>
+        <button onclick="addStudent()">Add Student</button>
 
-    <ul id="list"></ul>
+        <h3 id="total"></h3>
+
+        <ul id="list"></ul>
+    </div>
 
     <script>
+        // 🔑 लॉगिन चेक करने का लॉजिक
+        function checkPassword() {
+            const enteredPassword = document.getElementById('password-input').value;
+            
+            // यहाँ अपना गुप्त पासवर्ड बदल सकते हैं
+            const correctPassword = "admin123"; 
+
+            if (enteredPassword === correctPassword) {
+                // सही पासवर्ड होने पर लॉगिन स्क्रीन छिप जाएगी और ऐप खुल जाएगा
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('main-app-content').style.display = 'block';
+                // ऐप खुलने के बाद लिस्ट लोड करें
+                display();
+            } else {
+                // गलत पासवर्ड होने पर एरर मैसेज दिखेगा
+                document.getElementById('error-message').style.display = 'block';
+            }
+        }
+
+        // Enter की दबाने पर भी लॉगिन हो जाए
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // 📋 अटेंडेंस ऐप का पुराना लॉजिक
         let students = JSON.parse(localStorage.getItem("students")) || [];
 
         // ➤ Add student
@@ -124,9 +225,6 @@
             document.getElementById("total").innerText =
                 "Total: " + total + " | Present: " + present + " | Absent: " + absent;
         }
-
-        // ➤ Start
-        display();
     </script>
 
 </body>
