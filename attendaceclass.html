@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Attendance App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f2f2f2;
+        }
+        
+        h1 {
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+        }
+        
+        input {
+            padding: 10px;
+            width: 70%;
+            margin: 5px;
+        }
+        
+        button {
+            padding: 8px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: white;
+        }
+        
+        li {
+            background: white;
+            margin: 5px;
+            padding: 10px;
+            list-style: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📋 Attendance App</h1>
+
+    <input type="text" id="name" placeholder="Enter student name">
+    <br>
+    <button onclick="addStudent()">Add Student</button>
+
+    <h3 id="total"></h3>
+
+    <ul id="list"></ul>
+
+    <script>
+        let students = JSON.parse(localStorage.getItem("students")) || [];
+
+        // ➤ Add student
+        function addStudent() {
+            let name = document.getElementById("name").value;
+
+            if (name === "") return;
+
+            students.push({
+                name: name,
+                status: "Absent"
+            });
+
+            saveData();
+            display();
+
+            document.getElementById("name").value = "";
+        }
+
+        // ➤ Mark attendance
+        function mark(index, status) {
+            students[index].status = status;
+            saveData();
+            display();
+        }
+
+        // ➤ Delete student
+        function del(index) {
+            students.splice(index, 1);
+            saveData();
+            display();
+        }
+
+        // ➤ Save data
+        function saveData() {
+            localStorage.setItem("students", JSON.stringify(students));
+        }
+
+        // ➤ Display list
+        function display() {
+            let list = document.getElementById("list");
+            list.innerHTML = "";
+
+            students.forEach((s, index) => {
+                let li = document.createElement("li");
+
+                li.innerHTML =
+                    s.name + " - " + s.status +
+                    "<br>" +
+                    "<button onclick='mark(" + index + ", \"Present\")'>Present</button>" +
+                    "<button onclick='mark(" + index + ", \"Absent\")'>Absent</button>" +
+                    "<button onclick='del(" + index + ")'>Delete</button>";
+
+                list.appendChild(li);
+            });
+
+            updateTotal();
+        }
+
+        // ➤ Count
+        function updateTotal() {
+            let total = students.length;
+            let present = students.filter(s => s.status === "Present").length;
+            let absent = students.filter(s => s.status === "Absent").length;
+
+            document.getElementById("total").innerText =
+                "Total: " + total + " | Present: " + present + " | Absent: " + absent;
+        }
+
+        // ➤ Start
+        display();
+    </script>
+
+</body>
+
+</html>
