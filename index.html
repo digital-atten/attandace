@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SRTMNU Matrix ERP v4.0</title>
+    <title>SRTMNU Attendance System</title>
     <style>
         :root {
             --primary: #2ecc71;
@@ -18,26 +18,307 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         body { background-color: #f1f5f9; color: var(--text-main); min-height: 100vh; }
         
-        /* LOGIN CARD STYLING */
-        #loginScreenContainer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 60%, var(--primary) 100%);
-            display: flex; justify-content: center; align-items: center; z-index: 10000;
-        }
-        .login-matrix-box {
-            background: #ffffff; padding: 40px; border-radius: 16px;
-            width: 90%; max-width: 420px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); text-align: center;
-        }
-        .login-matrix-box h2 { color: var(--dark-bg); font-size: 24px; margin-bottom: 8px; font-weight: 800; }
-        .login-matrix-box p { color: var(--text-muted); font-size: 13px; margin-bottom: 24px; }
-        .input-wrapper { margin-bottom: 18px; text-align: left; }
-        .input-wrapper label { display: block; font-size: 11px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; text-transform: uppercase; }
-        .input-wrapper input { width: 100%; padding: 12px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-weight: 600; outline: none; }
-        .btn-submit-auth { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 8px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-submit-auth:hover { background: var(--primary-dark); }
-        .auth-error-shield { color: var(--danger); font-size: 12px; margin-top: 12px; display: none; font-weight: bold; background: #fee2e2; padding: 10px; border-radius: 6px; }
-
-        /* MAIN APP DASHBOARD */
-        #dashboardMainContainer { display: none; }
         .app-navbar { background: var(--dark-bg); color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; }
-        .brand-logo { font-size: 22px
+        .brand-logo { font-size: 22px; font-weight: 800; }
+        .teacher-badge { background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--primary); }
+        
+        .dot-menu-trigger { font-size: 24px; cursor: pointer; padding: 0 10px; background: rgba(255,255,255,0.15); border-radius: 6px; position: relative; user-select: none; }
+        .dropdown-panel-box { display: none; position: absolute; right: 0; top: 40px; background: white; min-width: 250px; box-shadow: 0px 10px 30px rgba(0,0,0,0.2); border-radius: 10px; z-index: 999; border: 1px solid #e2e8f0; overflow: hidden; }
+        .dropdown-panel-box header { background: #f8fafc; padding: 10px 15px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .dropdown-panel-box a { color: var(--text-main); padding: 12px 15px; text-decoration: none; display: block; font-size: 13px; cursor: pointer; font-weight: 600; border-bottom: 1px solid #f1f5f9; text-align: left; }
+        .dropdown-panel-box a:hover { background-color: #f1f5f9; color: var(--accent); }
+        
+        .workspace-grid { max-width: 1400px; margin: 25px auto; padding: 0 20px; display: grid; gap: 20px; }
+        .panel-row-top { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; }
+        .ui-card { background: var(--card-white); border-radius: 12px; padding: 22px; border: 1px solid #e2e8f0; }
+        .ui-card h3 { font-size: 14px; color: var(--dark-bg); text-transform: uppercase; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; }
+        
+        .form-control-block { margin-bottom: 14px; }
+        .form-control-block label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
+        .form-control-block select, .form-control-block input, .form-control-block textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; font-weight: 600; outline: none; background: #f8fafc; }
+        
+        .btn-engine { width: 100%; background: var(--primary); color: white; border: none; padding: 11px; border-radius: 6px; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 12px; }
+        .btn-engine.blue-variant { background: var(--accent); }
+        
+        .timetable-matrix-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 10px; }
+        .time-slot-node { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; font-size: 12px; font-weight: 600; }
+        .time-slot-node.active-lecture { border-color: var(--primary); background: #e8f5e9; }
+        .time-slot-node span { display: block; font-weight: 800; color: var(--dark-bg); margin-bottom: 4px; }
+        
+        .counter-matrix-strip { background-color: var(--dark-bg); color: white; border-radius: 10px; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+        .badge-cluster { display: flex; gap: 15px; }
+        .counter-badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; }
+        .counter-badge.tot { background: #475569; }
+        .counter-badge.prs { background: var(--primary); }
+        .counter-badge.abs { background: var(--danger); }
+        
+        .table-wrapper-slate { background: var(--card-white); border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .table-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .register-sheet-table { width: 100%; border-collapse: collapse; }
+        .register-sheet-table th { padding: 12px; background: #f8fafc; color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; text-align: left; }
+        .register-sheet-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 13px; font-weight: 600; }
+        
+        .state-btn { border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; margin-right: 4px; font-weight: bold; }
+        .state-btn.p-btn { background: #e8f5e9; color: green; }
+        .state-btn.p-btn.active { background: var(--primary); color: white; }
+        .state-btn.a-btn { background: #ffebee; color: red; }
+        .state-btn.a-btn.active { background: var(--danger); color: white; }
+        .remark-field-input { padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 12px; width: 130px; }
+        .broadcast-anchor-link { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; border-radius: 4px; padding: 5px 8px; font-size: 11px; font-weight: bold; text-decoration: none; }
+        .pill-lbl { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .pill-lbl.none { background: #e2e8f0; color: #475569; }
+        .pill-lbl.present { background: #dcfce7; color: #15803d; }
+        .pill-lbl.absent { background: #fee2e2; color: #b91c1c; }
+    </style>
+</head>
+<body>
+
+    <div id="dashboardMainContainer" style="display: block;">
+        <header class="app-navbar">
+            <div class="brand-logo">Matrix <span style="color:var(--primary)">ERP v4.0</span></div>
+            <div style="display: flex; align-items: center; gap: 15px; position: relative;">
+                <span class="teacher-badge">System Mode: DIRECT_ACCESS</span>
+                <div class="dot-menu-trigger" id="dotMenuDropdownId" onclick="toggleSettingsPanelStrip(event)">⋮
+                    <div class="dropdown-panel-box" id="settingsPanelWrapper">
+                        <header>Relational Pipeline Utilities</header>
+                        <a onclick="executeRosterMatrixPurge()">Clear Current Roster Sheet</a>
+                        <a onclick="injectBatchDatabaseDummyPool('BCA_1')">Inject BCA I Year Pool</a>
+                        <a onclick="injectBatchDatabaseDummyPool('BCA_2')">Inject BCA II Year Pool</a>
+                        <a onclick="injectBatchDatabaseDummyPool('BCA_3')">Inject BCA III Year Pool</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="workspace-grid">
+            <div class="panel-row-top">
+                <div class="ui-card">
+                    <h3>⚙️ Course Streams Mapping</h3>
+                    <div class="form-control-block">
+                        <label>Active Structural Division Target</label>
+                        <select id="streamAllocationSelector" onchange="synchronizeSystemStateRegistry()">
+                            <option value="BCA_1" selected>BCA 1st Year</option>
+                            <option value="BCA_2">BCA 2nd Year</option>
+                            <option value="BCA_3">BCA 3rd Year</option>
+                            <option value="BCS_1">BCS 1st Year</option>
+                            <option value="BCS_2">BCS 2nd Year</option>
+                            <option value="BCS_3">BCS 3rd Year</option>
+                        </select>
+                    </div>
+                    <div class="form-control-block">
+                        <label>Operation Calendar Working Date</label>
+                        <input type="date" id="calendarProcessingDate" onchange="synchronizeSystemStateRegistry()">
+                    </div>
+                </div>
+
+                <div class="ui-card">
+                    <h3>📥 Bulk Registration Data Intake</h3>
+                    <div class="form-control-block">
+                        <label>Paste Comma Separated Names</label>
+                        <textarea id="bulkDataInputRosterBlock" rows="2" placeholder="Rahul Sharma, Priya Patil, Amit Kulkarni, Anjali Joshi"></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <button type="button" class="btn-engine" onclick="processBulkStringArrayParsing()">Execute Loading</button>
+                        <button type="button" class="btn-engine blue-variant" onclick="triggerPythonReportCompilation()">📋 Compile Report Array</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-card">
+                <h3>📅 Current Active Timetable Scheduling Allocations</h3>
+                <div class="timetable-matrix-grid">
+                    <div class="time-slot-node active-lecture"><span>09:00 AM - 10:00 AM</span>Lecture 1: Core Programming</div>
+                    <div class="time-slot-node"><span>10:15 AM - 11:15 AM</span>Lecture 2: Database Systems</div>
+                    <div class="time-slot-node"><span>11:30 AM - 12:30 PM</span>Lecture 3: Computer Networks</div>
+                    <div class="time-slot-node"><span>01:00 PM - 02:00 PM</span>Lecture 4: Lab Experiment</div>
+                </div>
+            </div>
+
+            <div class="counter-matrix-strip">
+                <div>Selected Stream: <span id="bannerActiveStreamText" style="color:var(--primary)">BCA 1st Year</span></div>
+                <div class="badge-cluster">
+                    <div>Total Base: <span class="counter-badge tot" id="boxTotalCountTally">0</span></div>
+                    <div>P: <span class="counter-badge prs" id="boxPresentCountTally">0</span></div>
+                    <div>A: <span class="counter-badge abs" id="boxAbsentCountTally">0</span></div>
+                </div>
+            </div>
+
+            <div class="table-wrapper-slate">
+                <div class="table-header-flex">
+                    <h2>📊 Live Attendance Ledger Board Matrix</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="singleNodeProfileNameInput" placeholder="Quick Student Name..." style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; font-size: 13px; font-weight: 600;">
+                        <button type="button" class="btn-engine" style="width: auto; padding: 0 20px;" onclick="executeSingleProfileInjection()">Add Student</button>
+                    </div>
+                </div>
+                
+                <table class="register-sheet-table">
+                    <thead>
+                        <tr>
+                            <th>Student Profile Identity</th>
+                            <th>Status State</th>
+                            <th>Daily Tracking Tally</th>
+                            <th>Monthly Average %</th>
+                            <th>Faculty Remarks</th>
+                            <th style="text-align: right;">State Controls</th>
+                            <th style="text-align: right;">SMS Alert Dispatch</th>
+                        </tr>
+                    </thead>
+                    <tbody id="primaryRegisterViewTableBody"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById("calendarProcessingDate").value = new Date().toISOString().split('T')[0];
+
+        window.addEventListener("DOMContentLoaded", function() {
+            injectBatchDatabaseDummyPool("BCA_1");
+            window.addEventListener("click", function(e) {
+                if (!e.target.matches('#dotMenuDropdownId')) {
+                    document.getElementById("settingsPanelWrapper").style.display = "none";
+                }
+            });
+        });
+
+        function toggleSettingsPanelStrip(e) {
+            e.stopPropagation();
+            var targetWrapper = document.getElementById("settingsPanelWrapper");
+            targetWrapper.style.display = (targetWrapper.style.display === "block") ? "none" : "block";
+        }
+
+        function fetchRosterPoolArray(streamId) {
+            var dataObj = JSON.parse(localStorage.getItem("matrix_clean_roster")) || {};
+            return dataObj[streamId] || [];
+        }
+
+        function commitRosterPoolArray(streamId, poolArray) {
+            var dataObj = JSON.parse(localStorage.getItem("matrix_clean_roster")) || {};
+            dataObj[streamId] = poolArray;
+            localStorage.setItem("matrix_clean_roster", JSON.stringify(dataObj));
+        }
+
+        function fetchDailyAttendanceLogMap(streamId, dateStr) {
+            var dataObj = JSON.parse(localStorage.getItem("matrix_clean_attendance")) || {};
+            return dataObj[streamId + "_" + dateStr] || {};
+        }
+
+        function commitDailyAttendanceLogMap(streamId, dateStr, logsMap) {
+            var dataObj = JSON.parse(localStorage.getItem("matrix_clean_attendance")) || {};
+            dataObj[streamId + "_" + dateStr] = logsMap;
+            localStorage.setItem("matrix_clean_attendance", JSON.stringify(dataObj));
+        }
+
+        function fetchDailyRemarksLogMap(streamId, dateStr) {
+            var dataObj = JSON.parse(localStorage.getItem("matrix_clean_remarks")) || {};
+            return dataObj[streamId + "_" + dateStr] || {};
+        }
+
+        function commitDailyRemarksLogMap(streamId, dateStr, remarksMap) {
+            var dataObj = JSON.parse(localStorage.getItem("matrix_clean_remarks")) || {};
+            dataObj[streamId + "_" + dateStr] = remarksMap;
+            localStorage.setItem("matrix_clean_remarks", JSON.stringify(dataObj));
+        }
+
+        function executeSingleProfileInjection() {
+            var el = document.getElementById("singleNodeProfileNameInput");
+            var name = el.value.trim();
+            if(!name) return;
+            var activeStream = document.getElementById("streamAllocationSelector").value;
+            var pool = fetchRosterPoolArray(activeStream);
+            pool.push({ id: "uid_" + Date.now(), name: name });
+            commitRosterPoolArray(activeStream, pool);
+            el.value = "";
+            synchronizeSystemStateRegistry();
+        }
+
+        function processBulkStringArrayParsing() {
+            var area = document.getElementById("bulkDataInputRosterBlock");
+            if(!area.value.trim()) return;
+            var activeStream = document.getElementById("streamAllocationSelector").value;
+            var pool = fetchRosterPoolArray(activeStream);
+            area.value.split(",").forEach(function(item) {
+                if(item.trim()) pool.push({ id: "uid_" + Date.now() + Math.random(), name: item.trim() });
+            });
+            commitRosterPoolArray(activeStream, pool);
+            area.value = "";
+            synchronizeSystemStateRegistry();
+        }
+
+        function synchronizeSystemStateRegistry() {
+            var activeStream = document.getElementById("streamAllocationSelector").value;
+            var activeDate = document.getElementById("calendarProcessingDate").value;
+            var students = fetchRosterPoolArray(activeStream);
+            var logs = fetchDailyAttendanceLogMap(activeStream, activeDate);
+            var remarks = fetchDailyRemarksLogMap(activeStream, activeDate);
+
+            document.getElementById("bannerActiveStreamText").innerText = document.getElementById("streamAllocationSelector").options[document.getElementById("streamAllocationSelector").selectedIndex].text;
+            document.getElementById("boxTotalCountTally").innerText = students.length;
+
+            var p = 0, a = 0;
+            students.forEach(function(s) {
+                if(logs[s.id] === "Present") p++;
+                if(logs[s.id] === "Absent") a++;
+            });
+            document.getElementById("boxPresentCountTally").innerText = p;
+            document.getElementById("boxAbsentCountTally").innerText = a;
+
+            var tbody = document.getElementById("primaryRegisterViewTableBody");
+            tbody.innerHTML = "";
+
+            if(students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">⚠️ List Empty. Top-right three-dots menu se student batch ko inject karein.</td></tr>';
+                return;
+            }
+
+            students.forEach(function(s) {
+                var status = logs[s.id] || "None";
+                var rem = remarks[s.id] || "";
+                var pill = status === "Present" ? "present" : (status === "Absent" ? "absent" : "none");
+                
+                var msg = status === "Present" ? `Dear Parent, your ward ${s.name} is PRESENT today.` : `URGENT: ${s.name} is ABSENT today. Remark: ${rem || 'No Info'}`;
+                var waUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(msg);
+
+                var tr = document.createElement("tr");
+                tr.innerHTML = `<td><strong>${s.name}</strong></td>` +
+                    `<td><span class="pill-lbl ${pill}">${status}</span></td>` +
+                    `<td>4/4 Lectures</td>` +
+                    `<td><strong style="color:var(--accent);">86%</strong></td>` +
+                    `<td><input type="text" class="remark-field-input" placeholder="Remark..." value="${rem}" onchange="commitRemark('${s.id}', this.value)"></td>` +
+                    `<td style="text-align:right;">` +
+                        `<button class="state-btn p-btn ${status==='Present'?'active':''}" onclick="commitStatus('${s.id}', 'Present')">P</button>` +
+                        `<button class="state-btn a-btn ${status==='Absent'?'active':''}" onclick="commitStatus('${s.id}', 'Absent')">A</button>` +
+                    `</td>` +
+                    `<td style="text-align:right;">${status!=='None'?`<a href="${waUrl}" target="_blank" class="broadcast-anchor-link">💬 Parent SMS</a>`:'-'}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.commitStatus = function(id, val) {
+            var activeStream = document.getElementById("streamAllocationSelector").value;
+            var activeDate = document.getElementById("calendarProcessingDate").value;
+            var logs = fetchDailyAttendanceLogMap(activeStream, activeDate);
+            logs[id] = val;
+            commitDailyAttendanceLogMap(activeStream, activeDate, logs);
+            synchronizeSystemStateRegistry();
+        };
+
+        window.commitRemark = function(id, val) {
+            var activeStream = document.getElementById("streamAllocationSelector").value;
+            var activeDate = document.getElementById("calendarProcessingDate").value;
+            var remarks = fetchDailyRemarksLogMap(activeStream, activeDate);
+            remarks[id] = val;
+            commitDailyRemarksLogMap(activeStream, activeDate, remarks);
+            synchronizeSystemStateRegistry();
+        };
+
+        window.executeRosterMatrixPurge = function() {
+            var activeStream = document.getElementById("streamAllocationSelector").value;
+            commitRosterPoolArray(activeStream, []);
+            synchronizeSystemStateRegistry();
+            document.getElementById("settingsPanelWrapper").style.display = "none";
+        };
+
+        window.injectBatchDatabaseDummyPool = function(id) {
+            var dummy = [{id:"d1",name:"Rahul Sharma"}, {id:"d2",name:"Priya Patil"}, {id:"d3",name:"Amit Kulkarni"},
